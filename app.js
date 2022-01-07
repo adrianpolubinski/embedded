@@ -1,8 +1,9 @@
 import fetch from 'node-fetch';
 import sqlite3 from 'sqlite3';
+import Datastore from 'nedb';
 
 
-const usersCount = 5;
+const usersCount = 1000;
 
 
 const response = await fetch(`https://randomuser.me/api/?results=${usersCount}&nat=US,ES,FR,NL,GB,FI,IE,AU,CH,DK,NO`);
@@ -87,9 +88,7 @@ for(let i=0; i<results.length; i++){
 }
 
 
-
-
-
+// SQLITE INSERT ROWS
 var db = new sqlite3.Database('db/sqlite3.db');
 // serialize czeka na zakonczenie i wywolanie db.close
 db.serialize(function() {
@@ -97,17 +96,22 @@ db.serialize(function() {
 
     let addressesId = [];
     let personsId = [];
+
+    // addAddresses();
+
     // insert to addresses table
-    var start = new Date()
-    var stmt = db.prepare("INSERT INTO addresses(streetname, streetnumber, city, state, country, postcode, coordlatitude, coordlongitude, offsettimezone, descriptiontimezone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    for (let i = 0; i < results.length; i++) {
-        stmt.run(streetNames[i], streetNumbers[i], cities[i], states[i], countries[i], postCodes[i], coordLatitudes[i], coordLongitudes[i], offsetTimeZones[i], descriptionsTimeZone[i]);
+    const addAddresses = () => {
+        var start = new Date()
+        var stmt = db.prepare("INSERT INTO addresses(streetname, streetnumber, city, state, country, postcode, coordlatitude, coordlongitude, offsettimezone, descriptiontimezone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        for (let i = 0; i < results.length; i++) {
+            stmt.run(streetNames[i], streetNumbers[i], cities[i], states[i], countries[i], postCodes[i], coordLatitudes[i], coordLongitudes[i], offsetTimeZones[i], descriptionsTimeZone[i]);
+        }
+        stmt.finalize(()=>{
+            var end = new Date() - start;
+            console.info('[SQLite] Czas instertowania do tabeli Addresses: %dms', end);
+            getIdAddress();
+        });
     }
-    stmt.finalize(()=>{
-        var end = new Date() - start;
-        console.info('Czas instertowania do tabeli Addresses: %dms', end);
-        getIdAddress();
-    });
 
     // get new id from adresses
     const getIdAddress = ()=>{
@@ -128,7 +132,7 @@ db.serialize(function() {
         }
         stmt.finalize(()=>{
             var end = new Date() - start;
-            console.info('Czas instertowania do tabeli Persons: %dms', end);
+            console.info('[SQLite] Czas instertowania do tabeli Persons: %dms', end);
             getIdperson();
         });
     }
@@ -150,7 +154,7 @@ db.serialize(function() {
         }
         stmt.finalize(()=>{
             var end = new Date() - start;
-            console.info('Czas instertowania do tabeli Documents: %dms', end);
+            console.info('[SQLite] Czas instertowania do tabeli Documents: %dms', end);
             addAccounts();
         });
     }
@@ -163,15 +167,151 @@ db.serialize(function() {
         }
         stmt.finalize(()=>{
             var end = new Date() - start;
-            console.info('Czas instertowania do tabeli Accounts: %dms', end);
+            console.info('[SQLite] Czas instertowania do tabeli Accounts: %dms', end);
             db.close(); 
         });
     }
-
-
-
 
 });
 
 
  
+// NEDO insert rows
+
+db = {};
+
+db.persons = new Datastore('db/nedb/persons.db');
+db.accounts = new Datastore('db/nedb/accounts.db');
+db.addresses = new Datastore('db/nedb/addresses.db');
+db.documents = new Datastore('db/nedb/documents.db');
+
+db.persons.loadDatabase();
+db.accounts.loadDatabase();
+db.addresses.loadDatabase();
+db.documents.loadDatabase();
+
+class Address{
+    constructor(streetName, streetNumber, city, state, country, postCode, coordLatitude, coordLongitude, offsetTimeZone, descriptionTimeZone){
+        this.streetName = streetName;
+        this.streetNumber = streetNumber;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.postCode = postCode;
+        this.coordLatitude = coordLatitude;
+        this.coordLongitude = coordLongitude;
+        this.offsetTimeZone = offsetTimeZone;
+        this.descriptionsTimeZone = descriptionTimeZone;
+    }
+}
+
+class Person {
+    constructor(titleName, firstName, lastName, gender, adress_id, national, cell, phone, email, picture, dateOfBirth, age){
+        this.titleName = titleName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.adress_id  = adress_id;
+        this.national = national;
+        this.cell = cell;
+        this.phone = phone;
+        this.email = email;
+        this.picture = picture;
+        this.dateOfBirth = dateOfBirth;
+        this.age = age;
+    }
+}
+
+class Document{
+    constructor(person_id, name, value){
+        this.person_id = person_id;
+        this.name = name;
+        this.value = value;
+    }
+}
+
+class Account{
+    constructor(person_id, userName, password, registredDate, registredYear){
+        this.person_id = person_id;
+        this.userName = userName;
+        this.password = password;
+        this.registredDate = registredDate;
+        this.registredYear = registredYear;
+    }
+}
+
+const addressesIdMongo = [];
+const personsIdMongo = [];
+
+const addAccountsMongo = () => {
+    var start = new Date()
+
+    const accounts = [];
+    for(let i=0; i<results.length; i++)
+        accounts.push(new Account(personsIdMongo[i], userNames[i], passwords[i], registredDates[i], registredYears[i]));
+
+    db.accounts.insert(accounts, function(err, newDocs){
+            var end = new Date() - start;
+            console.info('[MongoDB] Czas instertowania do tabeli Accounts: %dms', end);
+        });
+}
+
+const addDocumentsMongo = () => {
+        var start = new Date()
+
+        const documents = [];
+        for(let i=0; i<results.length; i++)
+            documents.push(new Document(personsIdMongo[i], documentNames[i], documentValues[i]))
+
+        db.documents.insert(documents, function(err, newDocs){
+            var end = new Date() - start;
+            console.info('[MongoDB] Czas instertowania do tabeli Documents: %dms', end); 
+            addAccountsMongo();
+        });
+        
+}
+
+const addPersonsMongo = () => {   
+    var start = new Date()
+
+    const persons = [];
+    for(let i=0; i<results.length; i++)
+        persons.push(new Person(titleNames[i], firstNames[i], lastNames[i], genders[i], addressesIdMongo[i], nationals[i], cells[i], phones[i], emails[i], pictures[i], datesOfBirth[i], ages[i]));
+    
+    db.persons.insert(persons, function(err, newDocs){
+        for(let i = 0; i < results.length; i++)
+            personsIdMongo.push(newDocs[i]._id);
+        var end = new Date() - start;
+        console.info('[MongoDB] Czas instertowania do tabeli Persons: %dms', end);  
+        addDocumentsMongo();
+    });
+}
+
+const addAddressesMongo = () => {
+    var start = new Date()
+
+    // const addresses = [];
+    // for(let i=0; i<results.length; i++)
+    //     addresses.push(new Address(streetNames[i], streetNumbers[i], cities[i], states[i], countries[i], postCodes[i], coordLatitudes[i], coordLongitudes[i], offsetTimeZones[i], descriptionsTimeZone[i]));
+
+    for(let i = 0; i < results.length; i++)
+        db.addresses.insert(new Address(streetNames[i], streetNumbers[i], cities[i], states[i], countries[i], postCodes[i], coordLatitudes[i], coordLongitudes[i], offsetTimeZones[i], descriptionsTimeZone[i]), function(err, newDocs){
+            addressesIdMongo.push(newDocs._id);
+            if(i==results.length-1){
+                var end = new Date() - start;
+                console.info('[MongoDB] Czas instertowania do tabeli Adresses: %dms', end);
+                addPersonsMongo();
+            }
+                
+    });
+    
+    // db.addresses.insert(addresses, function(err, newDocs){
+    //     for(let i = 0; i < results.length; i++)
+    //         addressesIdMongo.push(newDocs[i]._id);
+    //     var end = new Date() - start;
+    //     console.info('[MongoDB] Czas instertowania do tabeli Adresses: %dms', end);
+    //     addPersonsMongo();
+    // });
+}
+
+addAddressesMongo();
