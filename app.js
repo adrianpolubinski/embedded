@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 import sqlite3 from 'sqlite3';
 
-const usersCount = 50;
+const usersCount = 1000;
 
 const response = await fetch(`https://randomuser.me/api/?results=${usersCount}&nat=US,ES,FR,NL,GB,FI,IE,AU,CH,DK,NO`);
 const data = await response.json();
@@ -109,7 +109,7 @@ const addAccounts = () => {
         var end = new Date() - start;
         console.info('[SQLite] Czas instertowania do tabeli Accounts: %dms', end);
         var globalEnd = new Date() - globalStartSqlite;
-        console.info('[Sqlite] Łączny czas wstawiania danych do nedb: %dms', globalEnd);
+        console.info('[Sqlite] Łączny czas wstawiania danych: %dms', globalEnd);
         db4.close(); 
     });
 }
@@ -196,7 +196,7 @@ class Address{
         this.coordLatitude = coordLatitude;
         this.coordLongitude = coordLongitude;
         this.offsetTimeZone = offsetTimeZone;
-        this.descriptionsTimeZone = descriptionTimeZone;
+        this.descriptionTimeZone = descriptionTimeZone;
     }
 }
 
@@ -255,7 +255,7 @@ const addAccountsMongo = () => {
                     console.info('[Nedb] Czas wstawiania danych do tabeli Accounts: %dms', end);
 
                     var globalEnd = new Date() - globalStart;
-                    console.info('[Nedb] Łączny czas wstawiania danych do nedb: %dms', globalEnd);
+                    console.info('[Nedb] Łączny czas wstawiania danych: %dms', globalEnd);
                 }
             });
 }
@@ -436,9 +436,11 @@ async function insertDataToLowDB(){
     const db2 = new Low(adapter)
 
     await db2.read();
+
     db2.data ||= { users: [] };
+
     for(let i = 0; i<results.length; i++)
-        db2.users.push(new User(genders[i], titleNames[i], firstNames[i], lastNames[i], streetNames[i], streetNumbers[i], cities[i], states[i], countries[i], postCodes[i], coordLatitudes[i],  coordLongitudes[i], offsetTimeZones[i], descriptionsTimeZone[i], emails[i], uuids[i], userNames[i], passwords[i], datesOfBirth[i], ages[i], registredDates[i], registredYears[i], phones[i], cells[i], documentNames[i], documentValues[i], pictures[i], nationals[i]));
+        db2.data.users.push(new User(genders[i], titleNames[i], firstNames[i], lastNames[i], streetNames[i], streetNumbers[i], cities[i], states[i], countries[i], postCodes[i], coordLatitudes[i],  coordLongitudes[i], offsetTimeZones[i], descriptionsTimeZone[i], emails[i], uuids[i], userNames[i], passwords[i], datesOfBirth[i], ages[i], registredDates[i], registredYears[i], phones[i], cells[i], documentNames[i], documentValues[i], pictures[i], nationals[i]));
 
     db2.write();
 
@@ -549,9 +551,7 @@ const insertDataToLevelDB = () => {
 
 
 
-// insertDataToLevelDB();
-// insertDataToLowDB();
-// insertDataToNedb();
-
 insertDataToSqlite();
-
+insertDataToNedb();
+insertDataToLowDB();
+insertDataToLevelDB();
