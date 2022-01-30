@@ -329,7 +329,7 @@ const insertDataToNedb = () => {
 ///////////////////////////////////////////////// LowDB //////////////////////////////////////////////////////////
 
 class Name{
-    constructor(titleName, firstName, lastName,){
+    constructor(titleName, firstName, lastName){
         this.title = titleName;
         this.first = firstName;
         this.last = lastName;
