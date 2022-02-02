@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 import sqlite3 from 'sqlite3';
 
-const usersCount = 1000;
+const usersCount = 10;
 
 const response = await fetch(`https://randomuser.me/api/?results=${usersCount}&nat=US,ES,FR,NL,GB,FI,IE,AU,CH,DK,NO`);
 const data = await response.json();
@@ -460,6 +460,9 @@ const insertDataToLevelDB = () => {
 
     var db = levelup(leveldown('db/levelDB'))
     for(let i = 0 ; i<results.length; i++){
+        db.put(`id:${uuids[i]}`, uuids[i], function (err) {
+            if (err) return console.log('Ooops!', err)
+        })
         db.put(`titleName:${uuids[i]}`, titleNames[i], function (err) {
             if (err) return console.log('Ooops!', err)
         })

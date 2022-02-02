@@ -328,6 +328,7 @@ const selectDataLevelDB = (obj) => {
 
     const keys = [];
 
+    const id =[];
     const titleNames = [];
     const firstNames = [];
     const lastNames = [];
@@ -360,7 +361,7 @@ const selectDataLevelDB = (obj) => {
     let i=0;
     db.createKeyStream()
     .on('data', function (data) {
-        if(i%27==0) count++;
+        if(i%28==0) count++;
         i++;
     })
     .on('end', function (data) {
@@ -378,6 +379,20 @@ const selectDataLevelDB = (obj) => {
         })
         .on('end', function (data) {
             for(let i=0; i<keys.length; i++){
+                db.get(`id:${keys[i]}`, function (err, value) {
+                    if (err) return console.log('Ooops!', err)
+
+                    if(obj.id!=undefined){
+                        if(obj.id == value)
+                            id.push(value);
+                        else
+                            id.push(undefined);
+                    }
+                    else{
+                        id.push(value);
+                    }
+
+                })
                 db.get(`titleName:${keys[i]}`, function (err, value) {
                     if (err) return console.log('Ooops!', err)
 
@@ -707,9 +722,9 @@ const selectDataLevelDB = (obj) => {
                     }
 
 
-                    if(keys[i]!=undefined && titleNames[i]!=undefined && firstNames[i]!=undefined && lastNames[i]!=undefined && genders[i]!=undefined && streetNames[i]!=undefined && streetNumbers[i]!=undefined && cities[i]!=undefined && states[i]!=undefined && countries[i]!=undefined && postCodes[i]!=undefined && coordLatitudes[i]!=undefined && coordLongitudes[i]!=undefined && offsetTimeZones[i]!=undefined && descriptionsTimeZone[i]!=undefined && nationals[i]!=undefined && cells[i]!=undefined && phones[i]!=undefined && emails[i]!=undefined && pictures[i]!=undefined && datesOfBirth[i]!=undefined && ages[i]!=undefined && documentNames[i]!=undefined &&  documentValues[i]!=undefined && userNames[i]!=undefined && passwords[i]!=undefined && registredDates[i]!=undefined && registredYears[i]!=undefined)
+                    if(id[i]!=undefined && titleNames[i]!=undefined && firstNames[i]!=undefined && lastNames[i]!=undefined && genders[i]!=undefined && streetNames[i]!=undefined && streetNumbers[i]!=undefined && cities[i]!=undefined && states[i]!=undefined && countries[i]!=undefined && postCodes[i]!=undefined && coordLatitudes[i]!=undefined && coordLongitudes[i]!=undefined && offsetTimeZones[i]!=undefined && descriptionsTimeZone[i]!=undefined && nationals[i]!=undefined && cells[i]!=undefined && phones[i]!=undefined && emails[i]!=undefined && pictures[i]!=undefined && datesOfBirth[i]!=undefined && ages[i]!=undefined && documentNames[i]!=undefined &&  documentValues[i]!=undefined && userNames[i]!=undefined && passwords[i]!=undefined && registredDates[i]!=undefined && registredYears[i]!=undefined)
 
-                    console.log("id: "+keys[i]+ ", titleName: " + titleNames[i] +", firstName: " + firstNames[i] + ", lastName: "+ lastNames[i] +", gender: "+ genders[i]+", streetName: "+streetNames[i]+", streetNumber: "+streetNumbers[i]+", city: "+cities[i]+", state: "+states[i]+", country: "+countries[i]+", postCode: "+postCodes[i]+", coordLatitude: "+coordLatitudes[i]+", coordLongitude: "+coordLongitudes[i]+", offsetTimeZone: "+offsetTimeZones[i]+", descriptionTimeZone: "+descriptionsTimeZone[i]+", national: "+nationals[i]+", cell: "+cells[i]+", phone: "+phones[i]+", email: "+emails[i]+", picture: "+pictures[i]+", dateOfBirth: "+datesOfBirth[i]+", age: "+ages[i]+", documentName: "+documentNames[i]+", value: "+documentValues[i]+", userName: "+userNames[i]+", password: "+passwords[i]+", registredDate: "+registredDates[i]+", registredYears: "+registredYears[i]);
+                    console.log("id: "+id[i]+ ", titleName: " + titleNames[i] +", firstName: " + firstNames[i] + ", lastName: "+ lastNames[i] +", gender: "+ genders[i]+", streetName: "+streetNames[i]+", streetNumber: "+streetNumbers[i]+", city: "+cities[i]+", state: "+states[i]+", country: "+countries[i]+", postCode: "+postCodes[i]+", coordLatitude: "+coordLatitudes[i]+", coordLongitude: "+coordLongitudes[i]+", offsetTimeZone: "+offsetTimeZones[i]+", descriptionTimeZone: "+descriptionsTimeZone[i]+", national: "+nationals[i]+", cell: "+cells[i]+", phone: "+phones[i]+", email: "+emails[i]+", picture: "+pictures[i]+", dateOfBirth: "+datesOfBirth[i]+", age: "+ages[i]+", documentName: "+documentNames[i]+", value: "+documentValues[i]+", userName: "+userNames[i]+", password: "+passwords[i]+", registredDate: "+registredDates[i]+", registredYears: "+registredYears[i]);
                     
                     if(i==keys.length-1){
                         var end = new Date() - start;
@@ -722,7 +737,8 @@ const selectDataLevelDB = (obj) => {
 
 }
 
-selectDataSqlite({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"})
-selectDataNedb({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
-selectDataLowDB({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
-selectDataLevelDB({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
+// selectDataSqlite({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"})
+// selectDataNedb({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
+// selectDataLowDB({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
+// selectDataLevelDB({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
+selectDataLevelDB({id: "05aeac1d-8f7f-40dc-9e32-d72d98871ec2"})
