@@ -560,10 +560,11 @@ async function updateDataLowDB(searchObj, updateObj){
     .value()
 
 
-    db2.write();
-
-    var end = new Date() - start;
-    console.info('[LowDB] Czas wczytywania i wyswietlania danych: %dms', end); 
+    db2.write()
+    .then(()=>{
+        var end = new Date() - start;
+        console.info('[LowDB] Czas Updatowania danych: %dms', end);
+    });
 }
 
 
@@ -575,10 +576,9 @@ async function updateDataLowDB(searchObj, updateObj){
 
 import levelup from 'levelup';
 import leveldown  from 'leveldown';
-import { Console } from 'console';
-import { title } from 'process';
 
-const selectDataLevelDB = (SearchObj, UpdateObj) => {
+
+async function selectDataLevelDB(SearchObj, UpdateObj){
     var start = new Date();
 
     const columns = Object.keys(UpdateObj);
@@ -615,553 +615,381 @@ const selectDataLevelDB = (SearchObj, UpdateObj) => {
     const registredDates = [];
     const registredYears = [];
     
-    let count=0;
-    let i=0;
-    db.createKeyStream()
-    .on('data', function (data) {
-        if(i%28==0) count++;
-        i++;
-    })
-    .on('end', function (data) {
-        i=0;
-        let str, key;
-        db.createKeyStream()
-        .on('data', function (data) {
-            if(i<count){
-                str = data+"";
-                key = str.split(':');
-                keys.push(key[1]);
-            }
-            else if(i==count) return;
-            i++;
-        })
-        .on('end', function (data) {
-            for(let i=0; i<keys.length; i++){
+    let str;
+    for await (const [key, value] of db.iterator()) {
 
-                db.get(`id:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
+        str = key+"";
+        if(str.split(':')[0] == "age"){
+            if(SearchObj.age==value+"" || SearchObj.age==undefined)
+                ages.push(value+"");
+            else
+                ages.push(undefined);
+        }
+        if(str.split(':')[0] == "cell")
+        {
+            if(SearchObj.cell==value+"" || SearchObj.cell==undefined)
+                cells.push(value+"");
+            else
+                cells.push(undefined);
+        }
+        if(str.split(':')[0] == "city")
+        {
+            if(SearchObj.city==value+""  || SearchObj.city==undefined)
+                cities.push(value+"");
+            else
+                cities.push(undefined);
+        }
+        if(str.split(':')[0] == "coordLatitude")
+        {
+            if(SearchObj.coordLatitude==value+""  || SearchObj.coordLatitude==undefined)
+                coordLatitudes.push(value+"");
+            else
+                coordLatitudes.push(undefined);
+        }
+        if(str.split(':')[0] == "coordLongitude")
+        {
+            if(SearchObj.coordLongitude==value+"" || SearchObj.coordLongitude==undefined)
+                coordLongitudes.push(value+"");
+            else
+                coordLongitudes.push(undefined);
+        }
+        if(str.split(':')[0] == "country")
+        {
+            if(SearchObj.country==value+""  || SearchObj.country==undefined)
+            countries.push(value+"");
+            else
+            countries.push(undefined);
+        }
+        if(str.split(':')[0] == "dateOfBirth")
+        {
+            if(SearchObj.dateOfBirth==value+""  || SearchObj.dateOfBirth==undefined)
+                datesOfBirth.push(value+"");
+            else
+                datesOfBirth.push(undefined);
+        }
+        if(str.split(':')[0] == "descriptionTimeZone")
+        {
+            if(SearchObj.descriptionTimeZone==value+""  || SearchObj.descriptionsTimeZone==undefined)
+                descriptionsTimeZone.push(value+"");
+            else
+                descriptionsTimeZone.push(undefined);
+        }
+        if(str.split(':')[0] == "documentName")
+        {
+            if(SearchObj.documentName==value+""  || SearchObj.documentNames==undefined)
+                documentNames.push(value+"");
+            else
+                documentNames.push(undefined);
+        }
+        if(str.split(':')[0] == "documentValue")
+        {
+            if(SearchObj.documentValue==value+""  || SearchObj.documentValue==undefined)
+                documentValues.push(value+"");
+            else
+                documentValues.push(undefined);
+        }
+        if(str.split(':')[0] == "email")
+        {
+            if(SearchObj.email==value+""  || SearchObj.email==undefined)
+                emails.push(value+"");
+            else
+                emails.push(undefined);
+        }
+        if(str.split(':')[0] == "firstName")
+        {
+            if(SearchObj.firstName==value+""  || SearchObj.firstName==undefined)
+            firstNames.push(value+"");
+            else
+            firstNames.push(undefined);
+        }
+        if(str.split(':')[0] == "gender")
+        {
+            if(SearchObj.gender==value+""  || SearchObj.gender==undefined)
+            genders.push(value+"");
+            else
+            genders.push(undefined);
+        }
+        if(str.split(':')[0] == "id")
+        {
+            if(SearchObj.id==value+""  || SearchObj.id==undefined)
+            id.push(value+"");
+            else
+            id.push(undefined);
+        }
+        if(str.split(':')[0] == "lastName")
+        {
+            if(SearchObj.lastName==value+""  || SearchObj.lastName==undefined)
+            lastNames.push(value+"");
+            else
+            lastNames.push(undefined);
+        }
+        if(str.split(':')[0] == "national")
+        {
+            if(SearchObj.national==value+"" || SearchObj.national==undefined)
+            nationals.push(value+"");
+            else
+            nationals.push(undefined);
+        }
+        if(str.split(':')[0] == "offsetTimeZone")
+        {
+            if(SearchObj.offsetTimeZone==value+"" || SearchObj.offsetTimeZone==undefined)
+            offsetTimeZones.push(value+"");
+            else
+            offsetTimeZones.push(undefined);
+        }
+        if(str.split(':')[0] == "password")
+        {
+            if(SearchObj.password==value+""  || SearchObj.password==undefined)
+            passwords.push(value+"");
+            else
+            passwords.push(undefined);
+        }
+        if(str.split(':')[0] == "phone")
+        {
+            if(SearchObj.phone==value+""  || SearchObj.phone==undefined)
+            phones.push(value+"");
+            else
+            phones.push(undefined);
+        }
+        if(str.split(':')[0] == "picture")
+        {
+            if(SearchObj.picture==value+"" || SearchObj.picture==undefined)
+            pictures.push(value+"");
+            else
+            pictures.push(undefined);
+        }
+        if(str.split(':')[0] == "postCode")
+        {
+            if(SearchObj.postCode==value+"" || SearchObj.postCode==undefined)
+            postCodes.push(value+"");
+            else
+            postCodes.push(undefined);
+        }
+        if(str.split(':')[0] == "registredDate")
+        {
+            if(SearchObj.registredDate==value+"" || SearchObj.registredDate==undefined)
+            registredDates.push(value+"");
+            else
+            registredDates.push(undefined);
+        }
+        if(str.split(':')[0] == "registredYear")
+        {
+            if(SearchObj.registredYear==value+"" || SearchObj.registredYear==undefined)
+            registredYears.push(value+"");
+            else
+            registredYears.push(undefined);
+        }
+        if(str.split(':')[0] == "state")
+        {
+            if(SearchObj.state==value+""  || SearchObj.state==undefined)
+            states.push(value+"");
+            else
+            states.push(undefined);
+        }
+        if(str.split(':')[0] == "streetName")
+        {
+            if(SearchObj.streetName==value+"" || SearchObj.streetName==undefined)
+            streetNames.push(value+"");
+            else
+            streetNames.push(undefined);
+        }
+        if(str.split(':')[0] == "streetNumber")
+        {
+            if(SearchObj.streetNumber==value+"" || SearchObj.streetNumber==undefined)
+            streetNumbers.push(value+"");
+            else
+            streetNumbers.push(undefined);
+        }
+        if(str.split(':')[0] == "titleName")
+        {
+            if(SearchObj.titleName==value+"" || SearchObj.titleName==undefined)
+            titleNames.push(value+"");
+            else
+            titleNames.push(undefined);
+        }
+        if(str.split(':')[0] == "userName")
+        {
+            if(SearchObj.userName==value+"" || SearchObj.userName==undefined)
+            userNames.push(value+"");
+            else
+            userNames.push(undefined);
+        }
+    }
 
-                    if(SearchObj.id!=undefined){
-                        if(SearchObj.id == value)
-                            id.push(value);
-                        else
-                            id.push(undefined);
-                    }
-                    else{
-                        id.push(value);
-                    }
-
-                })
-
-
-                db.get(`titleName:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-
-                    if(SearchObj.titleName!=undefined){
-                        if(SearchObj.titleName == value)
-                            titleNames.push(value);
-                        else
-                            titleNames.push(undefined);
-                    }
-                    else{
-                        titleNames.push(value);
-                    }
-
-                })
-                db.get(`firstName:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-
-                    if(SearchObj.firstName!=undefined){
-                        if(SearchObj.firstName == value)
-                            firstNames.push(value);
-                        else
-                            firstNames.push(undefined);
-                    }
-                    else{
-                        firstNames.push(value);
-                    }
-                })
-                db.get(`lastName:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-
-                    if(SearchObj.lastName!=undefined){
-                        if(SearchObj.lastName == value)
-                            lastNames.push(value);
-                        else
-                            lastNames.push(undefined);
-                    }
-                    else{
-                        lastNames.push(value);
-                    }
-                })
-                db.get(`gender:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.gender!=undefined){
-                        if(SearchObj.gender == value)
-                            genders.push(value);
-                        else
-                            genders.push(undefined);
-                    }
-                    else{
-                        genders.push(value);
-                    }
-                })
-                db.get(`national:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.national!=undefined){
-                        if(SearchObj.national == value)
-                            nationals.push(value);
-                        else
-                            nationals.push(undefined);
-                    }
-                    else{
-                        nationals.push(value);
-                    }
-                })
-                db.get(`cell:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.cell!=undefined){
-                        if(SearchObj.cell == value)
-                            cells.push(value);
-                        else
-                            cells.push(undefined);
-                    }
-                    else{
-                        cells.push(value);
-                    }
-                })
-                db.get(`phone:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.phone!=undefined){
-                        if(SearchObj.phone == value)
-                            phones.push(value);
-                        else
-                            phones.push(undefined);
-                    }
-                    else{
-                        phones.push(value);
-                    }
-                })
-                db.get(`email:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.email!=undefined){
-                        if(SearchObj.email == value)
-                            emails.push(value);
-                        else
-                            emails.push(undefined);
-                    }
-                    else{
-                        emails.push(value);
-                    }
-                })
-                db.get(`picture:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.picture!=undefined){
-                        if(SearchObj.picture == value)
-                            pictures.push(value);
-                        else
-                            pictures.push(undefined);
-                    }
-                    else{
-                        pictures.push(value);
-                    }
-                })
-                db.get(`dateOfBirth:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.dateOfBirth!=undefined){
-                        if(SearchObj.dateOfBirth == value)
-                            datesOfBirth.push(value);
-                        else
-                            datesOfBirth.push(undefined);
-                    }
-                    else{
-                        datesOfBirth.push(value);
-                    }
-                })
-                db.get(`age:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.age!=undefined){
-                        if(SearchObj.age == value)
-                            ages.push(value);
-                        else
-                            ages.push(undefined);
-                    }
-                    else{
-                        ages.push(value);
-                    }
-                })
-                db.get(`streetName:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.streetName!=undefined){
-                        if(SearchObj.streetName == value)
-                            streetNames.push(value);
-                        else
-                            streetNames.push(undefined);
-                    }
-                    else{
-                        streetNames.push(value);
-                    }
-                })
-                db.get(`streetNumber:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.streetNumber!=undefined){
-                        if(SearchObj.streetNumber == value)
-                            streetNumbers.push(value);
-                        else
-                            streetNumbers.push(undefined);
-                    }
-                    else{
-                        streetNumbers.push(value);
-                    }
-                })
-                db.get(`city:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.city!=undefined){
-                        if(SearchObj.city == value)
-                            cities.push(value);
-                        else
-                            cities.push(undefined);
-                    }
-                    else{
-                        cities.push(value);
-                    }
-                })
-                db.get(`state:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.state!=undefined){
-                        if(SearchObj.state == value)
-                            states.push(value);
-                        else
-                            states.push(undefined);
-                    }
-                    else{
-                        states.push(value);
-                    }
-                })
-                db.get(`country:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.country!=undefined){
-                        if(SearchObj.country == value)
-                            countries.push(value);
-                        else
-                            countries.push(undefined);
-                    }
-                    else{
-                        countries.push(value);
-                    }
-                })
-                db.get(`postCode:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.postCode!=undefined){
-                        if(SearchObj.postCode == value)
-                            postCodes.push(value);
-                        else
-                            postCodes.push(undefined);
-                    }
-                    else{
-                        postCodes.push(value);
-                    }
-                })
-                db.get(`coordLatitude:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.coordLatitude!=undefined){
-                        if(SearchObj.coordLatitude == value)
-                            coordLatitudes.push(value);
-                        else
-                            coordLatitudes.push(undefined);
-                    }
-                    else{
-                        coordLatitudes.push(value);
-                    }
-                })
-                db.get(`coordLongitude:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.coordLongitude!=undefined){
-                        if(SearchObj.coordLongitude == value)
-                            coordLongitudes.push(value);
-                        else
-                            coordLongitudes.push(undefined);
-                    }
-                    else{
-                       coordLongitudes.push(value);
-                    }
-                })
-                db.get(`offsetTimeZone:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.offsetTimeZone!=undefined){
-                        if(SearchObj.offsetTimeZone == value)
-                            offsetTimeZones.push(value);
-                        else
-                            offsetTimeZones.push(undefined);
-                    }
-                    else{
-                        offsetTimeZones.push(value);
-                    }
-                })
-                db.get(`descriptionTimeZone:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.descriptionTimeZone!=undefined){
-                        if(SearchObj.descriptionTimeZone == value)
-                            descriptionsTimeZone.push(value);
-                        else
-                            descriptionsTimeZone.push(undefined);
-                    }
-                    else{
-                        descriptionsTimeZone.push(value);
-                    }
-                })
-                db.get(`documentName:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.documentName!=undefined){
-                        if(SearchObj.documentName == value)
-                            documentNames.push(value);
-                        else
-                            documentNames.push(undefined);
-                    }
-                    else{
-                        documentNames.push(value);
-                    }
-                })
-                db.get(`documentValue:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.documentValue!=undefined){
-                        if(SearchObj.documentValue == value)
-                            documentValues.push(value);
-                        else
-                            documentValues.push(undefined);
-                    }
-                    else{
-                        documentValues.push(value);
-                    }
-                })
-                db.get(`userName:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.userName!=undefined){
-                        if(SearchObj.userName == value)
-                            userNames.push(value);
-                        else
-                            userNames.push(undefined);
-                    }
-                    else{
-                        userNames.push(value);
-                    }
-                })
-                db.get(`password:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.password!=undefined){
-                        if(SearchObj.password == value)
-                            passwords.push(value);
-                        else
-                            passwords.push(undefined);
-                    }
-                    else{
-                        passwords.push(value);
-                    }
-                })
-                db.get(`registredDate:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.registredDate!=undefined){
-                        if(SearchObj.registredDate == value)
-                            registredDates.push(value);
-                        else
-                            registredDates.push(undefined);
-                    }
-                    else{
-                        registredDates.push(value);
-                    }
-                })
-                db.get(`registredYear:${keys[i]}`, function (err, value) {
-                    if (err) return console.log('Ooops!', err)
-                    if(SearchObj.registredYear!=undefined){
-                        if(SearchObj.registredYear == value)
-                            registredYears.push(value);
-                        else
-                            registredYears.push(undefined);
-                    }
-                    else{
-                        registredYears.push(value);
-                    }
-
-
-                    if(id[i]!=undefined && titleNames[i]!=undefined && firstNames[i]!=undefined && lastNames[i]!=undefined && genders[i]!=undefined && streetNames[i]!=undefined && streetNumbers[i]!=undefined && cities[i]!=undefined && states[i]!=undefined && countries[i]!=undefined && postCodes[i]!=undefined && coordLatitudes[i]!=undefined && coordLongitudes[i]!=undefined && offsetTimeZones[i]!=undefined && descriptionsTimeZone[i]!=undefined && nationals[i]!=undefined && cells[i]!=undefined && phones[i]!=undefined && emails[i]!=undefined && pictures[i]!=undefined && datesOfBirth[i]!=undefined && ages[i]!=undefined && documentNames[i]!=undefined &&  documentValues[i]!=undefined && userNames[i]!=undefined && passwords[i]!=undefined && registredDates[i]!=undefined && registredYears[i]!=undefined){
-
+    for(let i =0; i<id.length; i++){
+        if(id[i]!=undefined && titleNames[i]!=undefined && firstNames[i]!=undefined && lastNames[i]!=undefined && genders[i]!=undefined && streetNames[i]!=undefined && streetNumbers[i]!=undefined && cities[i]!=undefined && states[i]!=undefined && countries[i]!=undefined && postCodes[i]!=undefined && coordLatitudes[i]!=undefined && coordLongitudes[i]!=undefined && offsetTimeZones[i]!=undefined && descriptionsTimeZone[i]!=undefined && nationals[i]!=undefined && cells[i]!=undefined && phones[i]!=undefined && emails[i]!=undefined && pictures[i]!=undefined && datesOfBirth[i]!=undefined && ages[i]!=undefined && documentNames[i]!=undefined &&  documentValues[i]!=undefined && userNames[i]!=undefined && passwords[i]!=undefined && registredDates[i]!=undefined && registredYears[i]!=undefined){
 
                     
-                        for(let j =0 ; j<columns.length; j++){
-                      
-                            if(columns[j] == "titleName"){
-                                db.put(`titleName:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+            for(let j =0 ; j<columns.length; j++){
+                        
+                if(columns[j] == "titleName"){
+                    db.put(`titleName:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "firstName"){
-                                db.put(`firstName:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "firstName"){
+                    db.put(`firstName:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "lastName"){
-                                db.put(`lastName:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "lastName"){
+                    db.put(`lastName:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "gender"){
-                                db.put(`gender:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "gender"){
+                    db.put(`gender:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "streetName"){
-                                db.put(`streetName:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "streetName"){
+                    db.put(`streetName:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "streetNumber"){
-                                db.put(`streetNumber:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "streetNumber"){
+                    db.put(`streetNumber:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "city"){
-                                db.put(`city:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "city"){
+                    db.put(`city:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "state"){
-                                db.put(`state:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "state"){
+                    db.put(`state:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "country"){
-                                db.put(`country:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "country"){
+                    db.put(`country:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "postCode"){
-                                db.put(`postCode:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "postCode"){
+                    db.put(`postCode:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "coordLatitude"){
-                                db.put(`coordLatitude:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "coordLatitude"){
+                    db.put(`coordLatitude:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "coordLongitude"){
-                                db.put(`coordLongitude:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "coordLongitude"){
+                    db.put(`coordLongitude:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "offsetTimeZone"){
-                                db.put(`offsetTimeZone:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "offsetTimeZone"){
+                    db.put(`offsetTimeZone:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "descriptionTimeZone"){
-                                db.put(`descriptionTimeZone:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "descriptionTimeZone"){
+                    db.put(`descriptionTimeZone:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "national"){
-                                db.put(`national:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "national"){
+                    db.put(`national:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "cell"){
-                                db.put(`cell:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
-                            if(columns[j] == "phone"){
-                                db.put(`phone:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "cell"){
+                    db.put(`cell:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
+                if(columns[j] == "phone"){
+                    db.put(`phone:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "email"){
-                                db.put(`email:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "email"){
+                    db.put(`email:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "picture"){
-                                db.put(`picture:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "picture"){
+                    db.put(`picture:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "dateOfBirth"){
-                                db.put(`dateOfBirth:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "dateOfBirth"){
+                    db.put(`dateOfBirth:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "age"){
-                                db.put(`age:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "age"){
+                    db.put(`age:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "documentName"){
-                                db.put(`documentName:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "documentName"){
+                    db.put(`documentName:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "value"){
-                                db.put(`value:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "value"){
+                    db.put(`value:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "userName"){
-                                db.put(`userName:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "userName"){
+                    db.put(`userName:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "password"){
-                                db.put(`password:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "password"){
+                    db.put(`password:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "registredDate"){
-                                db.put(`registredDate:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
+                if(columns[j] == "registredDate"){
+                    db.put(`registredDate:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
 
-                            if(columns[j] == "registredYears"){
-                                db.put(`registredYears:${id[i]}`, UpdateObj[columns[j]], function (err) {
-                                    if (err) return console.log('Ooops!', err)
-                                })  
-                            }
-                        }
-                    }
+                if(columns[j] == "registredYears"){
+                    db.put(`registredYears:${id[i]}`, UpdateObj[columns[j]], function (err) {
+                        if (err) return console.log('Ooops!', err)
+                    })  
+                }
+            }      
+        }
+    }
 
 
-                    
-                    if(i==keys.length-1){
-                        var end = new Date() - start;
-                        console.info('[LevelDB] Czas wczytywania i wyswietlania danych: %dms', end); 
-                    }
-                })
-            }
-        }) 
-    })
+    var end = new Date() - start;
+    console.info('[LevelDB] Czas Updatowania danych: %dms', end);
+
 
 }
 
@@ -1169,4 +997,4 @@ const selectDataLevelDB = (SearchObj, UpdateObj) => {
 // updateDataSqlite({id: 1},{firstName: "Marek", });
 // updateDataNedb({_id:"0JsLME9vp5YJTiFC"}, {streetName: "Avenue Tony-Garnier2", firstName});
 // updateDataLowDB({uuid: "04e258e5-2168-4d56-ade0-afcafbb58475"}, {email:"alfred.gibson@o2.pl", city:"Białystok"})
-selectDataLevelDB({titleName: "Mr"},{picture:"chlopiec", dateOfBirth:"działa 3 !"})
+selectDataLevelDB({titleName: "Mrs"},{picture:"chlopiec", dateOfBirth:"działa 3 !"})
