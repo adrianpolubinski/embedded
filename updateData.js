@@ -997,4 +997,4 @@ async function selectDataLevelDB(SearchObj, UpdateObj){
 // updateDataSqlite({id: 1},{firstName: "Marek", });
 // updateDataNedb({_id:"0JsLME9vp5YJTiFC"}, {streetName: "Avenue Tony-Garnier2", firstName});
 // updateDataLowDB({uuid: "04e258e5-2168-4d56-ade0-afcafbb58475"}, {email:"alfred.gibson@o2.pl", city:"Białystok"})
-selectDataLevelDB({titleName: "Mrs"},{picture:"chlopiec", dateOfBirth:"działa 3 !"})
+selectDataLevelDB({titleName: "Mrs"}, {picture:"chlopiec", dateOfBirth:"działa 3 !"})

@@ -4,15 +4,20 @@ import sqlite3 from 'sqlite3';
 const selectDataSqlite = (obj) => {
     var start = new Date();
 
-    const columns = Object.keys(obj);
+    const isEmpty = Object.keys(obj).length === 0;
+
+
     let str="";
-    for(let i=0; i<columns.length; i++){
-        str += (i<columns.length-1)? columns[i]+"='"+obj[columns[i]]+"' AND ": columns[i]+"='"+obj[columns[i]]+"'";
+    if(!isEmpty){
+        str="where ";
+        const columns = Object.keys(obj);
+        for(let i=0; i<columns.length; i++){
+            str += (i<columns.length-1)? columns[i]+"='"+obj[columns[i]]+"' AND ": columns[i]+"='"+obj[columns[i]]+"'";
+        }
     }
 
-
     var db4 = new sqlite3.Database('db/sqlite3.db');
-    db4.each(`SELECT * FROM persons join addresses ON persons.id=addresses.id join documents ON persons.id=documents.person_id join accounts ON persons.id=accounts.person_id where ${str}`, function(err, row) {
+    db4.each(`SELECT * FROM persons join addresses ON persons.id=addresses.id join documents ON persons.id=documents.person_id join accounts ON persons.id=accounts.person_id ${str}`, function(err, row) {
 
         console.log("id: "+row.id + ", titleName: " + row.titlename +", firstName: " + row.firstname + ", lastName: "+ row.lastname +", gender: "+ row.gender+", streetName: "+row.streetname+", streetNumber: "+row.streetnumber+", city: "+row.city+", state: "+row.state+", country: "+row.country+", postCode: "+row.postcode+", coordLatitude: "+row.coordlatitude+", coordLongitude: "+row.coordlongitude+", offsetTimeZone: "+row.offsettimezone+", descriptionTimeZone: "+row.descriptiontimezone+", national: "+row.national+", cell: "+row.cell+", phone: "+row.phone+", email: "+row.email+", picture: "+row.picture+", dateOfBirth: "+row.dateofbirth+", age: "+row.age+", documentName: "+row.name+", value: "+row.value+", userName: "+row.username+", password: "+row.password+", registredDate: "+row.registreddate+", registredYears: "+row.registredyears);
     
@@ -123,9 +128,6 @@ const selectDataNedb = (obj) => {
 
 
                                     console.log("id: "+docs[i]._id + ", titleName: " + docs[i].titleName +", firstName: " + docs[i].firstName + ", lastName: "+ docs[i].lastName +", gender: "+ docs[i].gender+", streetName: "+address[i].streetName+", streetNumber: "+address[i].streetNumber+", city: "+address[i].city+", state: "+address[i].state+", country: "+address[i].country+", postCode: "+address[i].postCode+", coordLatitude: "+address[i].coordLatitude+", coordLongitude: "+address[i].coordLongitude+", offsetTimeZone: "+address[i].offsetTimeZone+", descriptionTimeZone: "+address[i].descriptionTimeZone+", national: "+docs[i].national+", cell: "+docs[i].cell+", phone: "+docs[i].phone+", email: "+docs[i].email+", picture: "+docs[i].picture+", dateOfBirth: "+docs[i].dateOfBirth+", age: "+docs[i].age+", documentName: "+document[i].name+", value: "+document[i].value+", userName: "+account[i].userName+", password: "+account[i].password+", registredDate: "+account[i].registredDate+", registredYears: "+account[i].registredYear);
-                                    var end = new Date() - start;
-                                    console.info('[Nedb] Czas wczytywania i wyswietlania danych: %dms', end);
-                                    
                                 }
                                 if(i==docs.length-1){
                                     var end = new Date() - start;
@@ -561,15 +563,15 @@ async function selectDataLevelDB(obj){
         if(id[i]!=undefined && titleNames[i]!=undefined && firstNames[i]!=undefined && lastNames[i]!=undefined && genders[i]!=undefined && streetNames[i]!=undefined && streetNumbers[i]!=undefined && cities[i]!=undefined && states[i]!=undefined && countries[i]!=undefined && postCodes[i]!=undefined && coordLatitudes[i]!=undefined && coordLongitudes[i]!=undefined && offsetTimeZones[i]!=undefined && descriptionsTimeZone[i]!=undefined && nationals[i]!=undefined && cells[i]!=undefined && phones[i]!=undefined && emails[i]!=undefined && pictures[i]!=undefined && datesOfBirth[i]!=undefined && ages[i]!=undefined && documentNames[i]!=undefined &&  documentValues[i]!=undefined && userNames[i]!=undefined && passwords[i]!=undefined && registredDates[i]!=undefined && registredYears[i]!=undefined){
 
             console.log("id: "+id[i] + ", titleName: " + titleNames[i] +", firstName: " + firstNames[i] + ", lastName: "+ lastNames[i] +", gender: "+ genders[i]+", streetName: "+streetNames[i]+", streetNumber: "+streetNumbers[i]+", city: "+cities[i]+", state: "+states[i]+", country: "+countries[i]+", postCode: "+postCodes[i]+", coordLatitude: "+coordLatitudes[i]+", coordLongitude: "+coordLongitudes[i]+", offsetTimeZone: "+offsetTimeZones[i]+", descriptionTimeZone: "+descriptionsTimeZone[i]+", national: "+nationals[i]+", cell: "+cells[i]+", phone: "+phones[i]+", email: "+emails[i]+", picture: "+pictures[i]+", dateOfBirth: "+datesOfBirth[i]+", age: "+ages[i]+", documentName: "+documentNames[i]+", value: "+documentValues[i]+", userName: "+userNames[i]+", password: "+passwords[i]+", registredDate: "+registredDates[i]+", registredYears: "+registredYears[i]);
-            console.log()
         }
     }
     var end = new Date() - start;
     console.info('[LevelDB] Czas wczytywania i wyswietlania danych: %dms', end); 
 }
 
-// selectDataSqlite({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"})
-// selectDataNedb({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
-// selectDataLowDB({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
-// selectDataLevelDB({ gender:'male', titleName:"Mr", firstName:"Alfred", offsetTimeZone:"+10:00"});
-selectDataLevelDB({})
+const obj = {firstName: "Rodney"};
+
+selectDataSqlite(obj)
+// selectDataNedb(obj);
+// selectDataLowDB(obj);
+// selectDataLevelDB(obj);
