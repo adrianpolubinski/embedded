@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 import sqlite3 from 'sqlite3';
 
-const usersCount = 5000;
+const usersCount = 50;
 
 const response = await fetch(`https://randomuser.me/api/?results=${usersCount}&nat=US,ES,FR,NL,GB,FI,IE,AU,CH,DK,NO`);
 const data = await response.json();

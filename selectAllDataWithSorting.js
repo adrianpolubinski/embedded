@@ -1,12 +1,21 @@
 ///////////////////////////////////////// Sqlite ////////////////////////////////////////
 import sqlite3 from 'sqlite3';
 
-const selectAllDataSqlite = () => {
+const selectAllDataSqlite = (sort) => {
     var start = new Date();
 
     var db4 = new sqlite3.Database('db/sqlite3.db');
 
-    db4.each("SELECT * FROM persons join addresses ON persons.id=addresses.id join documents ON persons.id=documents.person_id join accounts ON persons.id=accounts.person_id", function(err, row) {
+    let str2;
+    if(sort.sort=="ASC")
+        str2=" ORDER BY "+sort.column+" ASC";
+    else if(sort.sort=="DESC")
+        str2=" ORDER BY "+sort.column+" DESC";
+    else
+        str2="";
+
+
+    db4.each(`SELECT * FROM persons join addresses ON persons.id=addresses.id join documents ON persons.id=documents.person_id join accounts ON persons.id=accounts.person_id ${str2}`, function(err, row) {
         console.log("id: "+row.id + ", titleName: " + row.titlename +", firstName: " + row.firstname + ", lastName: "+ row.lastname +", gender: "+ row.gender+", streetName: "+row.streetname+", streetNumber: "+row.streetnumber+", city: "+row.city+", state: "+row.state+", country: "+row.country+", postCode: "+row.postcode+", coordLatitude: "+row.coordlatitude+", coordLongitude: "+row.coordlongitude+", offsetTimeZone: "+row.offsettimezone+", descriptionTimeZone: "+row.descriptiontimezone+", national: "+row.national+", cell: "+row.cell+", phone: "+row.phone+", email: "+row.email+", picture: "+row.picture+", dateOfBirth: "+row.dateofbirth+", age: "+row.age+", documentName: "+row.name+", value: "+row.value+", userName: "+row.username+", password: "+row.password+", registredDate: "+row.registreddate+", registredYears: "+row.registredyears);
     }, function(){
         var end = new Date() - start;
@@ -19,7 +28,7 @@ const selectAllDataSqlite = () => {
 
 import Datastore from 'nedb';
 
-const selectAllDataNedb = () => {
+const selectAllDataNedb = (sort) => {
     var start = new Date()
 
     var db3 = {};
@@ -35,7 +44,7 @@ const selectAllDataNedb = () => {
     db3.documents.loadDatabase();
 
 
-    db3.persons.find({}, function (err, docs) {
+    db3.persons.find({}).sort(sort).exec(function (err, docs) {
         let account = [];
         let address = [];
         let document = [];
@@ -73,7 +82,7 @@ import { Low, JSONFile } from 'lowdb'
 import { fileURLToPath } from 'url'
 import lodash from 'lodash'
 
-async function selectAllDataLowDB(){
+async function selectAllDataLowDB(sort){
     var start = new Date();
 
     const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -90,7 +99,7 @@ async function selectAllDataLowDB(){
 
     const users = db2.chain
     .get('users')
-    // .find({})
+    .orderBy(sort.variable, sort.sort)
     .value()
 
     for(let i =0; i<users.length; i++){
@@ -167,6 +176,7 @@ const selectAllDataLevelDB = () => {
             i++;
         })
         .on('end', function (data) {
+
             for(let i=0; i<keys.length; i++){
                 
 
@@ -282,9 +292,16 @@ const selectAllDataLevelDB = () => {
                     if (err) return console.log('Ooops!', err)
                     registredYears.push(value);
 
-                    console.log("id: "+id[i]+ ", titleName: " + titleNames[i] +", firstName: " + firstNames[i] + ", lastName: "+ lastNames[i] +", gender: "+ genders[i]+", streetName: "+streetNames[i]+", streetNumber: "+streetNumbers[i]+", city: "+cities[i]+", state: "+states[i]+", country: "+countries[i]+", postCode: "+postCodes[i]+", coordLatitude: "+coordLatitudes[i]+", coordLongitude: "+coordLongitudes[i]+", offsetTimeZone: "+offsetTimeZones[i]+", descriptionTimeZone: "+descriptionsTimeZone[i]+", national: "+nationals[i]+", cell: "+cells[i]+", phone: "+phones[i]+", email: "+emails[i]+", picture: "+pictures[i]+", dateOfBirth: "+datesOfBirth[i]+", age: "+ages[i]+", documentName: "+documentNames[i]+", value: "+documentValues[i]+", userName: "+userNames[i]+", password: "+passwords[i]+", registredDate: "+registredDates[i]+", registredYears: "+registredYears[i])
                     
                     if(i==keys.length-1){
+
+                        const column = firstNames;
+                        var result = Array.from(Array(column.length).keys()).sort((a, b) => column[a] > column[b] ? -1 : (column[b] > column[a]) | 0)
+
+                        for(let i =0; i<result.length; i++){
+                            console.log("id: "+id[result[i]] + ", titleName: " + titleNames[result[i]] +", firstName: " + firstNames[result[i]] + ", lastName: "+ lastNames[result[i]] +", gender: "+ genders[result[i]]+", streetName: "+streetNames[result[i]]+", streetNumber: "+streetNumbers[result[i]]+", city: "+cities[result[i]]+", state: "+states[result[i]]+", country: "+countries[result[i]]+", postCode: "+postCodes[result[i]]+", coordLatitude: "+coordLatitudes[result[i]]+", coordLongitude: "+coordLongitudes[result[i]]+", offsetTimeZone: "+offsetTimeZones[result[i]]+", descriptionTimeZone: "+descriptionsTimeZone[result[i]]+", national: "+nationals[result[i]]+", cell: "+cells[result[i]]+", phone: "+phones[result[i]]+", email: "+emails[result[i]]+", picture: "+pictures[result[i]]+", dateOfBirth: "+datesOfBirth[result[i]]+", age: "+ages[result[i]]+", documentName: "+documentNames[result[i]]+", value: "+documentValues[result[i]]+", userName: "+userNames[result[i]]+", password: "+passwords[result[i]]+", registredDate: "+registredDates[result[i]]+", registredYears: "+registredYears[result[i]]);
+                        }
+
                         var end = new Date() - start;
                         console.info('[LevelDB] Czas wczytywania i wyswietlania danych: %dms', end); 
                     }
@@ -297,8 +314,8 @@ const selectAllDataLevelDB = () => {
 
 }
 
-// selectAllDataSqlite();
-// selectAllDataNedb();
-// selectAllDataLowDB();
-// selectAllDataLevelDB();
+// selectAllDataSqlite({column: "firstname", sort: "ASC"})
+// selectAllDataNedb({firstName: 1}); 
+// selectAllDataLowDB({variable:"name.first", sort: "asc"});
+selectAllDataLevelDB();
 
