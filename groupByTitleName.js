@@ -25,18 +25,13 @@ import Datastore from "nedb";
 
 const groupByNedb = () => {
   var start = new Date();
-
   var db3 = {};
-
   let groupValues = [];
-
   db3.persons = new Datastore("db/nedb/persons.db");
   db3.persons.loadDatabase();
-
   db3.persons.find({}, function (err, docs) {
     for (let i = 0; i < docs.length; i++) groupValues.push(docs[i].titleName);
     groupValues = [...new Set(groupValues)];
-
     console.log("Group Column | Group Count");
     for (let i = 0; i < groupValues.length; i++) {
       db3.persons.count({ titleName: groupValues[i] }, function (err, count) {
@@ -128,30 +123,19 @@ const groupByLevelDB = () => {
               titleNames.push(value);
 
               if (i == keys.length - 1) {
-                let Madame = 0;
-                let Mademoiselle = 0;
-                let Miss = 0;
-                let Monsieur = 0;
-                let Mr = 0;
-                let Mrs = 0;
-                let Ms = 0;
+                const count = {};
 
-                for (let i = 0; i < titleNames.length; i++)
-                  if (titleNames[i] == "Madame") Madame++;
-                  else if (titleNames[i] == "Mademoiselle") Mademoiselle++;
-                  else if (titleNames[i] == "Miss") Miss++;
-                  else if (titleNames[i] == "Monsieur") Monsieur++;
-                  else if (titleNames[i] == "Mr") Mr++;
-                  else if (titleNames[i] == "Mrs") Mrs++;
-                  else if (titleNames[i] == "Ms") Ms++;
+                titleNames.forEach((element) => {
+                  count[element] = (count[element] || 0) + 1;
+                });
 
-                console.log("Madame " + Madame);
-                console.log("Mademoiselle " + Mademoiselle);
-                console.log("Miss " + Miss);
-                console.log("Monsieur " + Monsieur);
-                console.log("Mr " + Mr);
-                console.log("Mrs " + Mrs);
-                console.log("Ms " + Ms);
+                console.log("Madame " + count.Madame);
+                console.log("Mademoiselle " + count.Mademoiselle);
+                console.log("Miss " + count.Miss);
+                console.log("Monsieur " + count.Monsieur);
+                console.log("Mr " + count.Mr);
+                console.log("Mrs " + count.Mrs);
+                console.log("Ms " + count.Ms);
 
                 var end = new Date() - start;
                 console.info(
@@ -166,6 +150,6 @@ const groupByLevelDB = () => {
 };
 
 // groupBySqlite();
-groupByNedb();
+// groupByNedb();
 // groupByLowDB();
-// groupByLevelDB();
+groupByLevelDB();

@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
+import fs from "fs";
 
-const usersCount = 100;
+const usersCount = process.argv[2];
 
 const response = await fetch(
   `https://randomuser.me/api/?results=${usersCount}&nat=US,ES,FR,NL,GB,FI,IE,AU,CH,DK,NO`
@@ -104,7 +105,18 @@ const addAccounts = () => {
   }
   stmt.finalize(() => {
     var globalEnd = new Date() - globalStartSqlite;
-    console.info("[Sqlite] Łączny czas wstawiania danych: %dms", globalEnd);
+    fs.writeFile(
+      "./badania/insertSqlite.txt",
+      globalEnd + "\n",
+      { flag: "a+" },
+      (err) => {
+        if (err) {
+          console.error(err);
+        }
+      }
+    );
+    // console.info("[Sqlite] Łączny czas wstawiania danych: %dms", globalEnd);
+
     db4.close();
   });
 };
@@ -295,7 +307,17 @@ const addAccountsMongo = () => {
       function (err, newDocs) {
         if (i == results.length - 1) {
           var globalEnd = new Date() - globalStart;
-          console.info("[Nedb] Łączny czas wstawiania danych: %dms", globalEnd);
+          fs.writeFile(
+            "./badania/insertNeDB.txt",
+            globalEnd + "\n",
+            { flag: "a+" },
+            (err) => {
+              if (err) {
+                console.error(err);
+              }
+            }
+          );
+          // console.info("[Nedb] Łączny czas wstawiania danych: %dms", globalEnd);
         }
       }
     );
@@ -572,7 +594,17 @@ async function insertDataToLowDB() {
   db2.write();
 
   var end = new Date() - start;
-  console.info("[LowDB] Czas wstawiania danych: %dms", end);
+  fs.writeFile(
+    "./badania/insertLowDB.txt",
+    end + "\n",
+    { flag: "a+" },
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+  // console.info("[LowDB] Czas wstawiania danych: %dms", end);
 }
 
 /////////////////////////////////////// LevelDB ///////////////////////////////////////////////
@@ -650,10 +682,20 @@ const insertDataToLevelDB = () => {
   }
 
   var end = new Date() - start;
-  console.info("[LevelDB] Czas wstawiania danych: %dms", end);
+  fs.writeFile(
+    "./badania/insertLevelDB.txt",
+    end + "\n",
+    { flag: "a+" },
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+  // console.info("[LevelDB] Czas wstawiania danych: %dms", end);
 };
 
-// insertDataToSqlite();
-insertDataToNedb();
+insertDataToSqlite();
+// insertDataToNedb();
 // insertDataToLowDB();
 // insertDataToLevelDB();
