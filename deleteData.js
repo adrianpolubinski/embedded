@@ -1,6 +1,6 @@
 ///////////////////////////////////////// Sqlite ////////////////////////////////////////
 import sqlite3 from "sqlite3";
-
+import fs from "fs";
 const deleteDataSqlite = (searchObj) => {
   var start = new Date();
 
@@ -117,22 +117,62 @@ const deleteDataSqlite = (searchObj) => {
   db4.serialize(function () {
     if (personStr != "")
       db4.run("DELETE FROM persons WHERE " + personStr, () => {
-        console.log("test1");
+        var end = new Date() - start;
+        fs.writeFile(
+          "./badania/deleteSqlite.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
       });
     if (accountStr != "")
       db4.run("DELETE FROM accounts WHERE " + accountStr, () => {
-        console.log("test2");
+        var end = new Date() - start;
+        fs.writeFile(
+          "./badania/deleteSqlite.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
       });
     if (addressStr != "")
       db4.run("DELETE FROM addresses WHERE " + addressStr, () => {
-        console.log("test3");
+        var end = new Date() - start;
+        fs.writeFile(
+          "./badania/deleteSqlite.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
       });
     if (documentStr != "")
       db4.run("DELETE FROM documents WHERE " + documentStr, () => {
-        console.log("test4");
+        var end = new Date() - start;
+        fs.writeFile(
+          "./badania/deleteSqlite.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
       });
-    var end = new Date() - start;
-    console.info("[SQLite] Czas usuwania danych: %dms", end);
+
+    // console.info("[SQLite] Czas usuwania danych: %dms", end);
     db4.close();
   });
 };
@@ -257,9 +297,15 @@ const deleteDataNedb = (obj) => {
       function (err, numRemoved) {
         db3.persons.persistence.compactDatafile();
         var end = new Date() - start;
-        console.info(
-          "[Nedb] Czas usuwania danych z kolekcji persons: %dms",
-          end
+        fs.writeFile(
+          "./badania/deleteNeDB.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
         );
       }
     );
@@ -272,9 +318,15 @@ const deleteDataNedb = (obj) => {
       function (err, numRemoved) {
         db3.accounts.persistence.compactDatafile();
         var end = new Date() - start;
-        console.info(
-          "[Nedb] Czas usuwania danych z kolekcji accounts: %dms",
-          end
+        fs.writeFile(
+          "./badania/deleteNeDB.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
         );
       }
     );
@@ -287,9 +339,15 @@ const deleteDataNedb = (obj) => {
       function (err, numRemoved) {
         db3.addresses.persistence.compactDatafile();
         var end = new Date() - start;
-        console.info(
-          "[Nedb] Czas usuwania danych z kolekcji addresses: %dms",
-          end
+        fs.writeFile(
+          "./badania/deleteNeDB.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
         );
       }
     );
@@ -302,9 +360,15 @@ const deleteDataNedb = (obj) => {
       function (err, numRemoved) {
         db3.documents.persistence.compactDatafile();
         var end = new Date() - start;
-        console.info(
-          "[Nedb] Czas usuwania danych z kolekcji documents: %dms",
-          end
+        fs.writeFile(
+          "./badania/deleteNeDB.txt",
+          end + "\n",
+          { flag: "a+" },
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
         );
       }
     );
@@ -528,7 +592,17 @@ async function deleteDataLowDB(obj) {
   db2.chain.remove(SearchObj).value();
   db2.write().then(() => {
     var end = new Date() - start;
-    console.info("[LowDB] Czas usuwania danych: %dms", end);
+    fs.writeFile(
+      "./badania/deleteLowDB.txt",
+      end + "\n",
+      { flag: "a+" },
+      (err) => {
+        if (err) {
+          console.error(err);
+        }
+      }
+    );
+    // console.info("[LowDB] Czas usuwania danych: %dms", end);
   });
 }
 
@@ -786,15 +860,20 @@ async function deleteDataLevelDB(obj) {
   }
 
   var end = new Date() - start;
-  console.info("[LevelDB] Czas usuwania danych: %dms", end);
+  fs.writeFile(
+    "./badania/deleteLevelDB.txt",
+    end + "\n",
+    { flag: "a+" },
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+  // console.info("[LevelDB] Czas usuwania danych: %dms", end);
 }
 
-deleteDataSqlite({
-  userName: "greenfish893",
-  streetName: "Itsenäisyydenkatu",
-  name: "HETU",
-  firstName: "Pinja",
-});
-// deleteDataNedb({name:"NINO"})
-// deleteDataLowDB({gender:"female", city:"Meldal"})
-// deleteDataLevelDB({registredYear: 8})
+deleteDataSqlite({ gender: "male", titleName: "Mr" });
+deleteDataNedb({ gender: "male", titleName: "Mr" });
+deleteDataLowDB({ gender: "male", titleName: "Mr" });
+deleteDataLevelDB({ gender: "male", titleName: "Mr" });
