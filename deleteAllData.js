@@ -12,16 +12,16 @@ const deleteAllDataFromSqlite = () => {
     db4.run("delete from addresses");
     db4.run("delete from documents", function () {
       var end = new Date() - start;
-      fs.writeFile(
-        "./badania/DeleteAllSqlite.txt",
-        end + "\n",
-        { flag: "a+" },
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
+      // fs.writeFile(
+      //   "./badania/DeleteAllSqlite.txt",
+      //   end + "\n",
+      //   { flag: "a+" },
+      //   (err) => {
+      //     if (err) {
+      //       console.error(err);
+      //     }
+      //   }
+      // );
       db4.close();
     });
   });
@@ -55,16 +55,16 @@ const deleteAllDataFromNedb = () => {
         db3.documents.remove({}, { multi: true }, function (err, numRemoved) {
           db3.documents.persistence.compactDatafile();
           var end = new Date() - start;
-          fs.writeFile(
-            "./badania/DeleteAllNeDB.txt",
-            end + "\n",
-            { flag: "a+" },
-            (err) => {
-              if (err) {
-                console.error(err);
-              }
-            }
-          );
+          // fs.writeFile(
+          //   "./badania/DeleteAllNeDB.txt",
+          //   end + "\n",
+          //   { flag: "a+" },
+          //   (err) => {
+          //     if (err) {
+          //       console.error(err);
+          //     }
+          //   }
+          // );
         });
       });
     });
@@ -92,16 +92,16 @@ async function deleteAllDataFromLowDB() {
   db2.chain.remove().value();
   db2.write().then(() => {
     var end = new Date() - start;
-    fs.writeFile(
-      "./badania/DeleteAllLowDB.txt",
-      end + "\n",
-      { flag: "a+" },
-      (err) => {
-        if (err) {
-          console.error(err);
-        }
-      }
-    );
+    // fs.writeFile(
+    //   "./badania/DeleteAllLowDB.txt",
+    //   end + "\n",
+    //   { flag: "a+" },
+    //   (err) => {
+    //     if (err) {
+    //       console.error(err);
+    //     }
+    //   }
+    // );
   });
 }
 
@@ -122,16 +122,16 @@ const deleteAllDataFromLevelDB = () => {
     })
     .on("end", function () {
       var end = new Date() - start;
-      fs.writeFile(
-        "./badania/DeleteAllLevelDB.txt",
-        end + "\n",
-        { flag: "a+" },
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
+      // fs.writeFile(
+      //   "./badania/DeleteAllLevelDB.txt",
+      //   end + "\n",
+      //   { flag: "a+" },
+      //   (err) => {
+      //     if (err) {
+      //       console.error(err);
+      //     }
+      //   }
+      // );
     });
 };
 

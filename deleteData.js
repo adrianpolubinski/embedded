@@ -115,8 +115,11 @@ const deleteDataSqlite = (searchObj) => {
 
   var db4 = new sqlite3.Database("db/sqlite3.db");
   db4.serialize(function () {
-    if (personStr != "")
-      db4.run("DELETE FROM persons WHERE " + personStr, () => {
+    if (personStr != "") console.log(personStr);
+    db4.run(
+      "DELETE P FROM persons P join addresses A ON A.id=P.adress_id WHERE " +
+        personStr,
+      () => {
         var end = new Date() - start;
         fs.writeFile(
           "./badania/deleteSqlite.txt",
@@ -128,7 +131,8 @@ const deleteDataSqlite = (searchObj) => {
             }
           }
         );
-      });
+      }
+    );
     if (accountStr != "")
       db4.run("DELETE FROM accounts WHERE " + accountStr, () => {
         var end = new Date() - start;
@@ -873,7 +877,7 @@ async function deleteDataLevelDB(obj) {
   // console.info("[LevelDB] Czas usuwania danych: %dms", end);
 }
 
-deleteDataSqlite({ gender: "male", titleName: "Mr" });
-deleteDataNedb({ gender: "male", titleName: "Mr" });
-deleteDataLowDB({ gender: "male", titleName: "Mr" });
-deleteDataLevelDB({ gender: "male", titleName: "Mr" });
+deleteDataSqlite({ gender: "female" });
+// deleteDataNedb({ gender: "male", titleName: "Mr" });
+// deleteDataLowDB({ gender: "male", titleName: "Mr" });
+// deleteDataLevelDB({ gender: "male", titleName: "Mr" });

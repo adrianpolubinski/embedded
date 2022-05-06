@@ -1,6 +1,6 @@
 ///////////////////////////////////////// Sqlite ////////////////////////////////////////
 import sqlite3 from "sqlite3";
-
+import fs from "fs";
 const selectAllDataSqlite = () => {
   var start = new Date();
 
@@ -9,70 +9,76 @@ const selectAllDataSqlite = () => {
   db4.each(
     "SELECT * FROM persons join addresses ON persons.id=addresses.id join documents ON persons.id=documents.person_id join accounts ON persons.id=accounts.person_id",
     function (err, row) {
-      console.log(
-        "id: " +
-          row.id +
-          ", titleName: " +
-          row.titlename +
-          ", firstName: " +
-          row.firstname +
-          ", lastName: " +
-          row.lastname +
-          ", gender: " +
-          row.gender +
-          ", streetName: " +
-          row.streetname +
-          ", streetNumber: " +
-          row.streetnumber +
-          ", city: " +
-          row.city +
-          ", state: " +
-          row.state +
-          ", country: " +
-          row.country +
-          ", postCode: " +
-          row.postcode +
-          ", coordLatitude: " +
-          row.coordlatitude +
-          ", coordLongitude: " +
-          row.coordlongitude +
-          ", offsetTimeZone: " +
-          row.offsettimezone +
-          ", descriptionTimeZone: " +
-          row.descriptiontimezone +
-          ", national: " +
-          row.national +
-          ", cell: " +
-          row.cell +
-          ", phone: " +
-          row.phone +
-          ", email: " +
-          row.email +
-          ", picture: " +
-          row.picture +
-          ", dateOfBirth: " +
-          row.dateofbirth +
-          ", age: " +
-          row.age +
-          ", documentName: " +
-          row.name +
-          ", value: " +
-          row.value +
-          ", userName: " +
-          row.username +
-          ", password: " +
-          row.password +
-          ", registredDate: " +
-          row.registreddate +
-          ", registredYears: " +
-          row.registredyears
-      );
+      // console.log(
+      //   "id: " +
+      //     row.id +
+      //     ", titleName: " +
+      //     row.titlename +
+      //     ", firstName: " +
+      //     row.firstname +
+      //     ", lastName: " +
+      //     row.lastname +
+      //     ", gender: " +
+      //     row.gender +
+      //     ", streetName: " +
+      //     row.streetname +
+      //     ", streetNumber: " +
+      //     row.streetnumber +
+      //     ", city: " +
+      //     row.city +
+      //     ", state: " +
+      //     row.state +
+      //     ", country: " +
+      //     row.country +
+      //     ", postCode: " +
+      //     row.postcode +
+      //     ", coordLatitude: " +
+      //     row.coordlatitude +
+      //     ", coordLongitude: " +
+      //     row.coordlongitude +
+      //     ", offsetTimeZone: " +
+      //     row.offsettimezone +
+      //     ", descriptionTimeZone: " +
+      //     row.descriptiontimezone +
+      //     ", national: " +
+      //     row.national +
+      //     ", cell: " +
+      //     row.cell +
+      //     ", phone: " +
+      //     row.phone +
+      //     ", email: " +
+      //     row.email +
+      //     ", picture: " +
+      //     row.picture +
+      //     ", dateOfBirth: " +
+      //     row.dateofbirth +
+      //     ", age: " +
+      //     row.age +
+      //     ", documentName: " +
+      //     row.name +
+      //     ", value: " +
+      //     row.value +
+      //     ", userName: " +
+      //     row.username +
+      //     ", password: " +
+      //     row.password +
+      //     ", registredDate: " +
+      //     row.registreddate +
+      //     ", registredYears: " +
+      //     row.registredyears
+      // );
     },
     function () {
       var end = new Date() - start;
-      console.info(
-        "[SQLite] Czas wczytywania i wyswietlania danych: %dms",
-        end
+      fs.writeFile(
+        "./badania/selectAllSqlite.txt",
+        end + "\n",
+        { flag: "a+" },
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
       );
     }
   );
@@ -112,70 +118,76 @@ const selectAllDataNedb = () => {
             function (err, doc) {
               document[i] = doc;
 
-              console.log(
-                "id: " +
-                  docs[i]._id +
-                  ", titleName: " +
-                  docs[i].titleName +
-                  ", firstName: " +
-                  docs[i].firstName +
-                  ", lastName: " +
-                  docs[i].lastName +
-                  ", gender: " +
-                  docs[i].gender +
-                  ", streetName: " +
-                  address[i].streetName +
-                  ", streetNumber: " +
-                  address[i].streetNumber +
-                  ", city: " +
-                  address[i].city +
-                  ", state: " +
-                  address[i].state +
-                  ", country: " +
-                  address[i].country +
-                  ", postCode: " +
-                  address[i].postCode +
-                  ", coordLatitude: " +
-                  address[i].coordLatitude +
-                  ", coordLongitude: " +
-                  address[i].coordLongitude +
-                  ", offsetTimeZone: " +
-                  address[i].offsetTimeZone +
-                  ", descriptionTimeZone: " +
-                  address[i].descriptionTimeZone +
-                  ", national: " +
-                  docs[i].national +
-                  ", cell: " +
-                  docs[i].cell +
-                  ", phone: " +
-                  docs[i].phone +
-                  ", email: " +
-                  docs[i].email +
-                  ", picture: " +
-                  docs[i].picture +
-                  ", dateOfBirth: " +
-                  docs[i].dateOfBirth +
-                  ", age: " +
-                  docs[i].age +
-                  ", documentName: " +
-                  document[i].name +
-                  ", value: " +
-                  document[i].value +
-                  ", userName: " +
-                  account[i].userName +
-                  ", password: " +
-                  account[i].password +
-                  ", registredDate: " +
-                  account[i].registredDate +
-                  ", registredYears: " +
-                  account[i].registredYear
-              );
+              // console.log(
+              //   "id: " +
+              //     docs[i]._id +
+              //     ", titleName: " +
+              //     docs[i].titleName +
+              //     ", firstName: " +
+              //     docs[i].firstName +
+              //     ", lastName: " +
+              //     docs[i].lastName +
+              //     ", gender: " +
+              //     docs[i].gender +
+              //     ", streetName: " +
+              //     address[i].streetName +
+              //     ", streetNumber: " +
+              //     address[i].streetNumber +
+              //     ", city: " +
+              //     address[i].city +
+              //     ", state: " +
+              //     address[i].state +
+              //     ", country: " +
+              //     address[i].country +
+              //     ", postCode: " +
+              //     address[i].postCode +
+              //     ", coordLatitude: " +
+              //     address[i].coordLatitude +
+              //     ", coordLongitude: " +
+              //     address[i].coordLongitude +
+              //     ", offsetTimeZone: " +
+              //     address[i].offsetTimeZone +
+              //     ", descriptionTimeZone: " +
+              //     address[i].descriptionTimeZone +
+              //     ", national: " +
+              //     docs[i].national +
+              //     ", cell: " +
+              //     docs[i].cell +
+              //     ", phone: " +
+              //     docs[i].phone +
+              //     ", email: " +
+              //     docs[i].email +
+              //     ", picture: " +
+              //     docs[i].picture +
+              //     ", dateOfBirth: " +
+              //     docs[i].dateOfBirth +
+              //     ", age: " +
+              //     docs[i].age +
+              //     ", documentName: " +
+              //     document[i].name +
+              //     ", value: " +
+              //     document[i].value +
+              //     ", userName: " +
+              //     account[i].userName +
+              //     ", password: " +
+              //     account[i].password +
+              //     ", registredDate: " +
+              //     account[i].registredDate +
+              //     ", registredYears: " +
+              //     account[i].registredYear
+              // );
 
               if (i == docs.length - 1) {
                 var end = new Date() - start;
-                console.info(
-                  "[Nedb] Czas wczytywania i wyswietlania danych: %dms",
-                  end
+                fs.writeFile(
+                  "./badania/selectAllNeDB.txt",
+                  end + "\n",
+                  { flag: "a+" },
+                  (err) => {
+                    if (err) {
+                      console.error(err);
+                    }
+                  }
                 );
               }
             }
@@ -214,68 +226,77 @@ async function selectAllDataLowDB() {
     .value();
 
   for (let i = 0; i < users.length; i++) {
-    console.log(
-      "id: " +
-        users[i].login.uuid +
-        ", titleName: " +
-        users[i].name.title +
-        ", firstName: " +
-        users[i].name.first +
-        ", lastName: " +
-        users[i].name.last +
-        ", gender: " +
-        users[i].gender +
-        ", streetName: " +
-        users[i].location.street.name +
-        ", streetNumber: " +
-        users[i].location.street.number +
-        ", city: " +
-        users[i].location.city +
-        ", state: " +
-        users[i].location.state +
-        ", country: " +
-        users[i].location.country +
-        ", postCode: " +
-        users[i].location.postCode +
-        ", coordLatitude: " +
-        users[i].location.coordinates.latitude +
-        ", coordLongitude: " +
-        users[i].location.coordinates.longitude +
-        ", offsetTimeZone: " +
-        users[i].location.timezone.offset +
-        ", descriptionTimeZone: " +
-        users[i].location.timezone.description +
-        ", national: " +
-        users[i].national +
-        ", cell: " +
-        users[i].cell +
-        ", phone: " +
-        users[i].phone +
-        ", email: " +
-        users[i].email +
-        ", picture: " +
-        users[i].picture +
-        ", dateOfBirth: " +
-        users[i].dateOfBirth.date +
-        ", age: " +
-        users[i].dateOfBirth.age +
-        ", documentName: " +
-        users[i].id.name +
-        ", value: " +
-        users[i].id.value +
-        ", userName: " +
-        users[i].login.userName +
-        ", password: " +
-        users[i].login.password +
-        ", registredDate: " +
-        users[i].registred.date +
-        ", registredYears: " +
-        users[i].registred.age
-    );
+    // console.log(
+    //   "id: " +
+    //     users[i].login.uuid +
+    //     ", titleName: " +
+    //     users[i].name.title +
+    //     ", firstName: " +
+    //     users[i].name.first +
+    //     ", lastName: " +
+    //     users[i].name.last +
+    //     ", gender: " +
+    //     users[i].gender +
+    //     ", streetName: " +
+    //     users[i].location.street.name +
+    //     ", streetNumber: " +
+    //     users[i].location.street.number +
+    //     ", city: " +
+    //     users[i].location.city +
+    //     ", state: " +
+    //     users[i].location.state +
+    //     ", country: " +
+    //     users[i].location.country +
+    //     ", postCode: " +
+    //     users[i].location.postCode +
+    //     ", coordLatitude: " +
+    //     users[i].location.coordinates.latitude +
+    //     ", coordLongitude: " +
+    //     users[i].location.coordinates.longitude +
+    //     ", offsetTimeZone: " +
+    //     users[i].location.timezone.offset +
+    //     ", descriptionTimeZone: " +
+    //     users[i].location.timezone.description +
+    //     ", national: " +
+    //     users[i].national +
+    //     ", cell: " +
+    //     users[i].cell +
+    //     ", phone: " +
+    //     users[i].phone +
+    //     ", email: " +
+    //     users[i].email +
+    //     ", picture: " +
+    //     users[i].picture +
+    //     ", dateOfBirth: " +
+    //     users[i].dateOfBirth.date +
+    //     ", age: " +
+    //     users[i].dateOfBirth.age +
+    //     ", documentName: " +
+    //     users[i].id.name +
+    //     ", value: " +
+    //     users[i].id.value +
+    //     ", userName: " +
+    //     users[i].login.userName +
+    //     ", password: " +
+    //     users[i].login.password +
+    //     ", registredDate: " +
+    //     users[i].registred.date +
+    //     ", registredYears: " +
+    //     users[i].registred.age
+    // );
   }
 
   var end = new Date() - start;
-  console.info("[LowDB] Czas wczytywania i wyswietlania danych: %dms", end);
+  fs.writeFile(
+    "./badania/selectAllLowDB.txt",
+    end + "\n",
+    { flag: "a+" },
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
 }
 
 ////////////////////////////////////////////// LevelDB /////////////////////////////////////////////
@@ -453,70 +474,76 @@ const selectAllDataLevelDB = () => {
               if (err) return console.log("Ooops!", err);
               registredYears.push(value);
 
-              console.log(
-                "id: " +
-                  id[i] +
-                  ", titleName: " +
-                  titleNames[i] +
-                  ", firstName: " +
-                  firstNames[i] +
-                  ", lastName: " +
-                  lastNames[i] +
-                  ", gender: " +
-                  genders[i] +
-                  ", streetName: " +
-                  streetNames[i] +
-                  ", streetNumber: " +
-                  streetNumbers[i] +
-                  ", city: " +
-                  cities[i] +
-                  ", state: " +
-                  states[i] +
-                  ", country: " +
-                  countries[i] +
-                  ", postCode: " +
-                  postCodes[i] +
-                  ", coordLatitude: " +
-                  coordLatitudes[i] +
-                  ", coordLongitude: " +
-                  coordLongitudes[i] +
-                  ", offsetTimeZone: " +
-                  offsetTimeZones[i] +
-                  ", descriptionTimeZone: " +
-                  descriptionsTimeZone[i] +
-                  ", national: " +
-                  nationals[i] +
-                  ", cell: " +
-                  cells[i] +
-                  ", phone: " +
-                  phones[i] +
-                  ", email: " +
-                  emails[i] +
-                  ", picture: " +
-                  pictures[i] +
-                  ", dateOfBirth: " +
-                  datesOfBirth[i] +
-                  ", age: " +
-                  ages[i] +
-                  ", documentName: " +
-                  documentNames[i] +
-                  ", value: " +
-                  documentValues[i] +
-                  ", userName: " +
-                  userNames[i] +
-                  ", password: " +
-                  passwords[i] +
-                  ", registredDate: " +
-                  registredDates[i] +
-                  ", registredYears: " +
-                  registredYears[i]
-              );
+              // console.log(
+              //   "id: " +
+              //     id[i] +
+              //     ", titleName: " +
+              //     titleNames[i] +
+              //     ", firstName: " +
+              //     firstNames[i] +
+              //     ", lastName: " +
+              //     lastNames[i] +
+              //     ", gender: " +
+              //     genders[i] +
+              //     ", streetName: " +
+              //     streetNames[i] +
+              //     ", streetNumber: " +
+              //     streetNumbers[i] +
+              //     ", city: " +
+              //     cities[i] +
+              //     ", state: " +
+              //     states[i] +
+              //     ", country: " +
+              //     countries[i] +
+              //     ", postCode: " +
+              //     postCodes[i] +
+              //     ", coordLatitude: " +
+              //     coordLatitudes[i] +
+              //     ", coordLongitude: " +
+              //     coordLongitudes[i] +
+              //     ", offsetTimeZone: " +
+              //     offsetTimeZones[i] +
+              //     ", descriptionTimeZone: " +
+              //     descriptionsTimeZone[i] +
+              //     ", national: " +
+              //     nationals[i] +
+              //     ", cell: " +
+              //     cells[i] +
+              //     ", phone: " +
+              //     phones[i] +
+              //     ", email: " +
+              //     emails[i] +
+              //     ", picture: " +
+              //     pictures[i] +
+              //     ", dateOfBirth: " +
+              //     datesOfBirth[i] +
+              //     ", age: " +
+              //     ages[i] +
+              //     ", documentName: " +
+              //     documentNames[i] +
+              //     ", value: " +
+              //     documentValues[i] +
+              //     ", userName: " +
+              //     userNames[i] +
+              //     ", password: " +
+              //     passwords[i] +
+              //     ", registredDate: " +
+              //     registredDates[i] +
+              //     ", registredYears: " +
+              //     registredYears[i]
+              // );
 
               if (i == keys.length - 1) {
                 var end = new Date() - start;
-                console.info(
-                  "[LevelDB] Czas wczytywania i wyswietlania danych: %dms",
-                  end
+                fs.writeFile(
+                  "./badania/selectAllLevelDB.txt",
+                  end + "\n",
+                  { flag: "a+" },
+                  (err) => {
+                    if (err) {
+                      console.error(err);
+                    }
+                  }
                 );
               }
             });

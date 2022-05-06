@@ -1,20 +1,30 @@
 ///////////////////////////////////////// Sqlite ////////////////////////////////////////
 import sqlite3 from "sqlite3";
-
+import fs from "fs";
 const groupBySqlite = () => {
   var start = new Date();
 
   var db4 = new sqlite3.Database("db/sqlite3.db");
 
-  console.log("Group Column | Group Count");
+  // console.log("Group Column | Group Count");
   db4.each(
     `SELECT COUNT(*) as count, titlename FROM persons group BY titlename`,
     function (err, row) {
-      console.log(row.titlename + " " + row.count);
+      // console.log(row.titlename + " " + row.count);
     },
     function () {
       var end = new Date() - start;
-      console.info("[SQLite] Czas grupowania danych: %dms", end);
+      fs.writeFile(
+        "./badania/groupBySqlite.txt",
+        end + "\n",
+        { flag: "a+" },
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
+      );
+      // console.info("[SQLite] Czas grupowania danych: %dms", end);
     }
   );
 };
@@ -32,13 +42,23 @@ const groupByNedb = () => {
   db3.persons.find({}, function (err, docs) {
     for (let i = 0; i < docs.length; i++) groupValues.push(docs[i].titleName);
     groupValues = [...new Set(groupValues)];
-    console.log("Group Column | Group Count");
+    // console.log("Group Column | Group Count");
     for (let i = 0; i < groupValues.length; i++) {
       db3.persons.count({ titleName: groupValues[i] }, function (err, count) {
-        console.log(groupValues[i] + " " + count);
+        // console.log(groupValues[i] + " " + count);
         if (i == groupValues.length - 1) {
           var end = new Date() - start;
-          console.info("[Nedb] Czas grupowania danych: %dms", end);
+          fs.writeFile(
+            "./badania/groupByNeDB.txt",
+            end + "\n",
+            { flag: "a+" },
+            (err) => {
+              if (err) {
+                console.error(err);
+              }
+            }
+          );
+          // console.info("[Nedb] Czas grupowania danych: %dms", end);
         }
       });
     }
@@ -69,18 +89,28 @@ async function groupByLowDB() {
 
   const users = db2.chain.get("users").countBy("name.title").value();
 
-  console.log("Group Column | Group Count");
+  // console.log("Group Column | Group Count");
 
-  console.log("Madame " + users.Madame);
-  console.log("Mademoiselle " + users.Mademoiselle);
-  console.log("Miss " + users.Miss);
-  console.log("Monsieur " + users.Monsieur);
-  console.log("Mr " + users.Mr);
-  console.log("Mrs " + users.Mrs);
-  console.log("Ms " + users.Ms);
+  // console.log("Madame " + users.Madame);
+  // console.log("Mademoiselle " + users.Mademoiselle);
+  // console.log("Miss " + users.Miss);
+  // console.log("Monsieur " + users.Monsieur);
+  // console.log("Mr " + users.Mr);
+  // console.log("Mrs " + users.Mrs);
+  // console.log("Ms " + users.Ms);
 
   var end = new Date() - start;
-  console.info("[LowDB] Czas wczytywania i wyswietlania danych: %dms", end);
+  fs.writeFile(
+    "./badania/groupByLowDB.txt",
+    end + "\n",
+    { flag: "a+" },
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+  // console.info("[LowDB] Czas wczytywania i wyswietlania danych: %dms", end);
 }
 
 ////////////////////////////////////////////// LevelDB /////////////////////////////////////////////
@@ -129,19 +159,29 @@ const groupByLevelDB = () => {
                   count[element] = (count[element] || 0) + 1;
                 });
 
-                console.log("Madame " + count.Madame);
-                console.log("Mademoiselle " + count.Mademoiselle);
-                console.log("Miss " + count.Miss);
-                console.log("Monsieur " + count.Monsieur);
-                console.log("Mr " + count.Mr);
-                console.log("Mrs " + count.Mrs);
-                console.log("Ms " + count.Ms);
+                // console.log("Madame " + count.Madame);
+                // console.log("Mademoiselle " + count.Mademoiselle);
+                // console.log("Miss " + count.Miss);
+                // console.log("Monsieur " + count.Monsieur);
+                // console.log("Mr " + count.Mr);
+                // console.log("Mrs " + count.Mrs);
+                // console.log("Ms " + count.Ms);
 
                 var end = new Date() - start;
-                console.info(
-                  "[LevelDB] Czas wczytywania i wyswietlania danych: %dms",
-                  end
+                fs.writeFile(
+                  "./badania/groupByLevelDB.txt",
+                  end + "\n",
+                  { flag: "a+" },
+                  (err) => {
+                    if (err) {
+                      console.error(err);
+                    }
+                  }
                 );
+                // console.info(
+                //   "[LevelDB] Czas wczytywania i wyswietlania danych: %dms",
+                //   end
+                // );
               }
             });
           }
@@ -149,7 +189,7 @@ const groupByLevelDB = () => {
     });
 };
 
-// groupBySqlite();
-// groupByNedb();
-// groupByLowDB();
+groupBySqlite();
+groupByNedb();
+groupByLowDB();
 groupByLevelDB();

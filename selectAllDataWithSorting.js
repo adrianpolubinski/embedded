@@ -1,6 +1,6 @@
 ///////////////////////////////////////// Sqlite ////////////////////////////////////////
 import sqlite3 from "sqlite3";
-
+import fs from "fs";
 const selectAllDataSqlite = (sort) => {
   var start = new Date();
 
@@ -14,70 +14,76 @@ const selectAllDataSqlite = (sort) => {
   db4.each(
     `SELECT * FROM persons join addresses ON persons.id=addresses.id join documents ON persons.id=documents.person_id join accounts ON persons.id=accounts.person_id ${str2}`,
     function (err, row) {
-      console.log(
-        "id: " +
-          row.id +
-          ", titleName: " +
-          row.titlename +
-          ", firstName: " +
-          row.firstname +
-          ", lastName: " +
-          row.lastname +
-          ", gender: " +
-          row.gender +
-          ", streetName: " +
-          row.streetname +
-          ", streetNumber: " +
-          row.streetnumber +
-          ", city: " +
-          row.city +
-          ", state: " +
-          row.state +
-          ", country: " +
-          row.country +
-          ", postCode: " +
-          row.postcode +
-          ", coordLatitude: " +
-          row.coordlatitude +
-          ", coordLongitude: " +
-          row.coordlongitude +
-          ", offsetTimeZone: " +
-          row.offsettimezone +
-          ", descriptionTimeZone: " +
-          row.descriptiontimezone +
-          ", national: " +
-          row.national +
-          ", cell: " +
-          row.cell +
-          ", phone: " +
-          row.phone +
-          ", email: " +
-          row.email +
-          ", picture: " +
-          row.picture +
-          ", dateOfBirth: " +
-          row.dateofbirth +
-          ", age: " +
-          row.age +
-          ", documentName: " +
-          row.name +
-          ", value: " +
-          row.value +
-          ", userName: " +
-          row.username +
-          ", password: " +
-          row.password +
-          ", registredDate: " +
-          row.registreddate +
-          ", registredYears: " +
-          row.registredyears
-      );
+      // console.log(
+      //   "id: " +
+      //     row.id +
+      //     ", titleName: " +
+      //     row.titlename +
+      //     ", firstName: " +
+      //     row.firstname +
+      //     ", lastName: " +
+      //     row.lastname +
+      //     ", gender: " +
+      //     row.gender +
+      //     ", streetName: " +
+      //     row.streetname +
+      //     ", streetNumber: " +
+      //     row.streetnumber +
+      //     ", city: " +
+      //     row.city +
+      //     ", state: " +
+      //     row.state +
+      //     ", country: " +
+      //     row.country +
+      //     ", postCode: " +
+      //     row.postcode +
+      //     ", coordLatitude: " +
+      //     row.coordlatitude +
+      //     ", coordLongitude: " +
+      //     row.coordlongitude +
+      //     ", offsetTimeZone: " +
+      //     row.offsettimezone +
+      //     ", descriptionTimeZone: " +
+      //     row.descriptiontimezone +
+      //     ", national: " +
+      //     row.national +
+      //     ", cell: " +
+      //     row.cell +
+      //     ", phone: " +
+      //     row.phone +
+      //     ", email: " +
+      //     row.email +
+      //     ", picture: " +
+      //     row.picture +
+      //     ", dateOfBirth: " +
+      //     row.dateofbirth +
+      //     ", age: " +
+      //     row.age +
+      //     ", documentName: " +
+      //     row.name +
+      //     ", value: " +
+      //     row.value +
+      //     ", userName: " +
+      //     row.username +
+      //     ", password: " +
+      //     row.password +
+      //     ", registredDate: " +
+      //     row.registreddate +
+      //     ", registredYears: " +
+      //     row.registredyears
+      // );
     },
     function () {
       var end = new Date() - start;
-      console.info(
-        "[SQLite] Czas wczytywania i wyswietlania danych: %dms",
-        end
+      fs.writeFile(
+        "./badania/selectAllDataSortSqlite.txt",
+        end + "\n",
+        { flag: "a+" },
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
       );
     }
   );
@@ -120,68 +126,78 @@ const selectAllDataNedb = (sort) => {
               function (err, doc) {
                 document[i] = doc;
 
-                console.log(
-                  "id: " +
-                    docs[i]._id +
-                    ", titleName: " +
-                    docs[i].titleName +
-                    ", firstName: " +
-                    docs[i].firstName +
-                    ", lastName: " +
-                    docs[i].lastName +
-                    ", gender: " +
-                    docs[i].gender +
-                    ", streetName: " +
-                    address[i].streetName +
-                    ", streetNumber: " +
-                    address[i].streetNumber +
-                    ", city: " +
-                    address[i].city +
-                    ", state: " +
-                    address[i].state +
-                    ", country: " +
-                    address[i].country +
-                    ", postCode: " +
-                    address[i].postCode +
-                    ", coordLatitude: " +
-                    address[i].coordLatitude +
-                    ", coordLongitude: " +
-                    address[i].coordLongitude +
-                    ", offsetTimeZone: " +
-                    address[i].offsetTimeZone +
-                    ", descriptionTimeZone: " +
-                    address[i].descriptionTimeZone +
-                    ", national: " +
-                    docs[i].national +
-                    ", cell: " +
-                    docs[i].cell +
-                    ", phone: " +
-                    docs[i].phone +
-                    ", email: " +
-                    docs[i].email +
-                    ", picture: " +
-                    docs[i].picture +
-                    ", dateOfBirth: " +
-                    docs[i].dateOfBirth +
-                    ", age: " +
-                    docs[i].age +
-                    ", documentName: " +
-                    document[i].name +
-                    ", value: " +
-                    document[i].value +
-                    ", userName: " +
-                    account[i].userName +
-                    ", password: " +
-                    account[i].password +
-                    ", registredDate: " +
-                    account[i].registredDate +
-                    ", registredYears: " +
-                    account[i].registredYear
-                );
+                // console.log(
+                //   "id: " +
+                //     docs[i]._id +
+                //     ", titleName: " +
+                //     docs[i].titleName +
+                //     ", firstName: " +
+                //     docs[i].firstName +
+                //     ", lastName: " +
+                //     docs[i].lastName +
+                //     ", gender: " +
+                //     docs[i].gender +
+                //     ", streetName: " +
+                //     address[i].streetName +
+                //     ", streetNumber: " +
+                //     address[i].streetNumber +
+                //     ", city: " +
+                //     address[i].city +
+                //     ", state: " +
+                //     address[i].state +
+                //     ", country: " +
+                //     address[i].country +
+                //     ", postCode: " +
+                //     address[i].postCode +
+                //     ", coordLatitude: " +
+                //     address[i].coordLatitude +
+                //     ", coordLongitude: " +
+                //     address[i].coordLongitude +
+                //     ", offsetTimeZone: " +
+                //     address[i].offsetTimeZone +
+                //     ", descriptionTimeZone: " +
+                //     address[i].descriptionTimeZone +
+                //     ", national: " +
+                //     docs[i].national +
+                //     ", cell: " +
+                //     docs[i].cell +
+                //     ", phone: " +
+                //     docs[i].phone +
+                //     ", email: " +
+                //     docs[i].email +
+                //     ", picture: " +
+                //     docs[i].picture +
+                //     ", dateOfBirth: " +
+                //     docs[i].dateOfBirth +
+                //     ", age: " +
+                //     docs[i].age +
+                //     ", documentName: " +
+                //     document[i].name +
+                //     ", value: " +
+                //     document[i].value +
+                //     ", userName: " +
+                //     account[i].userName +
+                //     ", password: " +
+                //     account[i].password +
+                //     ", registredDate: " +
+                //     account[i].registredDate +
+                //     ", registredYears: " +
+                //     account[i].registredYear
+                // );
 
                 if (i == docs.length - 1) {
                   var end = new Date() - start;
-                  console.info("[Nedb] Czas wczytywania danych: %dms", end);
+                  fs.writeFile(
+                    "./badania/selectAllDataSortNeDB.txt",
+                    end + "\n",
+                    { flag: "a+" },
+                    (err) => {
+                      if (err) {
+                        console.error(err);
+                      }
+                    }
+                  );
+                  // console.info("[Nedb] Czas wczytywania danych: %dms", end);
                 }
               }
             );
@@ -219,68 +235,78 @@ async function selectAllDataLowDB(sort) {
     .value();
 
   for (let i = 0; i < users.length; i++) {
-    console.log(
-      "id: " +
-        users[i].login.uuid +
-        ", titleName: " +
-        users[i].name.title +
-        ", firstName: " +
-        users[i].name.first +
-        ", lastName: " +
-        users[i].name.last +
-        ", gender: " +
-        users[i].gender +
-        ", streetName: " +
-        users[i].location.street.name +
-        ", streetNumber: " +
-        users[i].location.street.number +
-        ", city: " +
-        users[i].location.city +
-        ", state: " +
-        users[i].location.state +
-        ", country: " +
-        users[i].location.country +
-        ", postCode: " +
-        users[i].location.postCode +
-        ", coordLatitude: " +
-        users[i].location.coordinates.latitude +
-        ", coordLongitude: " +
-        users[i].location.coordinates.longitude +
-        ", offsetTimeZone: " +
-        users[i].location.timezone.offset +
-        ", descriptionTimeZone: " +
-        users[i].location.timezone.description +
-        ", national: " +
-        users[i].national +
-        ", cell: " +
-        users[i].cell +
-        ", phone: " +
-        users[i].phone +
-        ", email: " +
-        users[i].email +
-        ", picture: " +
-        users[i].picture +
-        ", dateOfBirth: " +
-        users[i].dateOfBirth.date +
-        ", age: " +
-        users[i].dateOfBirth.age +
-        ", documentName: " +
-        users[i].id.name +
-        ", value: " +
-        users[i].id.value +
-        ", userName: " +
-        users[i].login.userName +
-        ", password: " +
-        users[i].login.password +
-        ", registredDate: " +
-        users[i].registred.date +
-        ", registredYears: " +
-        users[i].registred.age
-    );
+    // console.log(
+    //   "id: " +
+    //     users[i].login.uuid +
+    //     ", titleName: " +
+    //     users[i].name.title +
+    //     ", firstName: " +
+    //     users[i].name.first +
+    //     ", lastName: " +
+    //     users[i].name.last +
+    //     ", gender: " +
+    //     users[i].gender +
+    //     ", streetName: " +
+    //     users[i].location.street.name +
+    //     ", streetNumber: " +
+    //     users[i].location.street.number +
+    //     ", city: " +
+    //     users[i].location.city +
+    //     ", state: " +
+    //     users[i].location.state +
+    //     ", country: " +
+    //     users[i].location.country +
+    //     ", postCode: " +
+    //     users[i].location.postCode +
+    //     ", coordLatitude: " +
+    //     users[i].location.coordinates.latitude +
+    //     ", coordLongitude: " +
+    //     users[i].location.coordinates.longitude +
+    //     ", offsetTimeZone: " +
+    //     users[i].location.timezone.offset +
+    //     ", descriptionTimeZone: " +
+    //     users[i].location.timezone.description +
+    //     ", national: " +
+    //     users[i].national +
+    //     ", cell: " +
+    //     users[i].cell +
+    //     ", phone: " +
+    //     users[i].phone +
+    //     ", email: " +
+    //     users[i].email +
+    //     ", picture: " +
+    //     users[i].picture +
+    //     ", dateOfBirth: " +
+    //     users[i].dateOfBirth.date +
+    //     ", age: " +
+    //     users[i].dateOfBirth.age +
+    //     ", documentName: " +
+    //     users[i].id.name +
+    //     ", value: " +
+    //     users[i].id.value +
+    //     ", userName: " +
+    //     users[i].login.userName +
+    //     ", password: " +
+    //     users[i].login.password +
+    //     ", registredDate: " +
+    //     users[i].registred.date +
+    //     ", registredYears: " +
+    //     users[i].registred.age
+    // );
   }
 
   var end = new Date() - start;
-  console.info("[LowDB] Czas wczytywania i wyswietlania danych: %dms", end);
+  fs.writeFile(
+    "./badania/selectAllDataSortLowDB.txt",
+    end + "\n",
+    { flag: "a+" },
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+  // console.info("[LowDB] Czas wczytywania i wyswietlania danych: %dms", end);
 }
 
 ////////////////////////////////////////////// LevelDB /////////////////////////////////////////////
@@ -462,83 +488,90 @@ const selectAllDataLevelDB = () => {
                 const column = firstNames;
                 var result = Array.from(Array(column.length).keys()).sort(
                   (a, b) =>
-                    column[a] > column[b] ? 1 : (column[b] > column[a]) | 0
+                    column[a] > column[b] ? -1 : (column[b] < column[a]) | 0
                 );
 
                 for (let i = 0; i < result.length; i++) {
-                  console.log(
-                    "id: " +
-                      id[result[i]] +
-                      ", titleName: " +
-                      titleNames[result[i]] +
-                      ", firstName: " +
-                      firstNames[result[i]] +
-                      ", lastName: " +
-                      lastNames[result[i]] +
-                      ", gender: " +
-                      genders[result[i]] +
-                      ", streetName: " +
-                      streetNames[result[i]] +
-                      ", streetNumber: " +
-                      streetNumbers[result[i]] +
-                      ", city: " +
-                      cities[result[i]] +
-                      ", state: " +
-                      states[result[i]] +
-                      ", country: " +
-                      countries[result[i]] +
-                      ", postCode: " +
-                      postCodes[result[i]] +
-                      ", coordLatitude: " +
-                      coordLatitudes[result[i]] +
-                      ", coordLongitude: " +
-                      coordLongitudes[result[i]] +
-                      ", offsetTimeZone: " +
-                      offsetTimeZones[result[i]] +
-                      ", descriptionTimeZone: " +
-                      descriptionsTimeZone[result[i]] +
-                      ", national: " +
-                      nationals[result[i]] +
-                      ", cell: " +
-                      cells[result[i]] +
-                      ", phone: " +
-                      phones[result[i]] +
-                      ", email: " +
-                      emails[result[i]] +
-                      ", picture: " +
-                      pictures[result[i]] +
-                      ", dateOfBirth: " +
-                      datesOfBirth[result[i]] +
-                      ", age: " +
-                      ages[result[i]] +
-                      ", documentName: " +
-                      documentNames[result[i]] +
-                      ", value: " +
-                      documentValues[result[i]] +
-                      ", userName: " +
-                      userNames[result[i]] +
-                      ", password: " +
-                      passwords[result[i]] +
-                      ", registredDate: " +
-                      registredDates[result[i]] +
-                      ", registredYears: " +
-                      registredYears[result[i]]
-                  );
+                  console.log(firstNames[result[i]] + "");
+                  // console.log(
+                  //   "id: " +
+                  //     id[result[i]] +
+                  //     ", titleName: " +
+                  //     titleNames[result[i]] +
+                  //     ", firstName: " +
+                  //     firstNames[result[i]] +
+                  //     ", lastName: " +
+                  //     lastNames[result[i]] +
+                  //     ", gender: " +
+                  //     genders[result[i]] +
+                  //     ", streetName: " +
+                  //     streetNames[result[i]] +
+                  //     ", streetNumber: " +
+                  //     streetNumbers[result[i]] +
+                  //     ", city: " +
+                  //     cities[result[i]] +
+                  //     ", state: " +
+                  //     states[result[i]] +
+                  //     ", country: " +
+                  //     countries[result[i]] +
+                  //     ", postCode: " +
+                  //     postCodes[result[i]] +
+                  //     ", coordLatitude: " +
+                  //     coordLatitudes[result[i]] +
+                  //     ", coordLongitude: " +
+                  //     coordLongitudes[result[i]] +
+                  //     ", offsetTimeZone: " +
+                  //     offsetTimeZones[result[i]] +
+                  //     ", descriptionTimeZone: " +
+                  //     descriptionsTimeZone[result[i]] +
+                  //     ", national: " +
+                  //     nationals[result[i]] +
+                  //     ", cell: " +
+                  //     cells[result[i]] +
+                  //     ", phone: " +
+                  //     phones[result[i]] +
+                  //     ", email: " +
+                  //     emails[result[i]] +
+                  //     ", picture: " +
+                  //     pictures[result[i]] +
+                  //     ", dateOfBirth: " +
+                  //     datesOfBirth[result[i]] +
+                  //     ", age: " +
+                  //     ages[result[i]] +
+                  //     ", documentName: " +
+                  //     documentNames[result[i]] +
+                  //     ", value: " +
+                  //     documentValues[result[i]] +
+                  //     ", userName: " +
+                  //     userNames[result[i]] +
+                  //     ", password: " +
+                  //     passwords[result[i]] +
+                  //     ", registredDate: " +
+                  //     registredDates[result[i]] +
+                  //     ", registredYears: " +
+                  //     registredYears[result[i]]
+                  // );
                 }
 
                 var end = new Date() - start;
-                console.info(
-                  "[LevelDB] Czas wczytywania i wyswietlania danych: %dms",
-                  end
-                );
+                // fs.writeFile(
+                //   "./badania/selectAllDataSortLevelDB.txt",
+                //   end + "\n",
+                //   { flag: "a+" },
+                //   (err) => {
+                //     if (err) {
+                //       console.error(err);
+                //     }
+                //   }
+                // );
               }
             });
           }
         });
     });
 };
-
-// selectAllDataSqlite({column: "firstname", sort: "ASC"})
-// selectAllDataNedb({firstName: 1});
-// selectAllDataLowDB({variable:"name.first", sort: "asc"});
+//
+selectAllDataSqlite({ column: "firstname", sort: "DESC" });
+selectAllDataNedb({ firstName: -1 });
+selectAllDataLowDB({ variable: "name.first", sort: "desc" });
 selectAllDataLevelDB();

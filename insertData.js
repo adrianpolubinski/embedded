@@ -105,16 +105,16 @@ const addAccounts = () => {
   }
   stmt.finalize(() => {
     var globalEnd = new Date() - globalStartSqlite;
-    fs.writeFile(
-      "./badania/insertSqlite.txt",
-      globalEnd + "\n",
-      { flag: "a+" },
-      (err) => {
-        if (err) {
-          console.error(err);
-        }
-      }
-    );
+    // fs.writeFile(
+    //   "./badania/insertSqlite.txt",
+    //   globalEnd + "\n",
+    //   { flag: "a+" },
+    //   (err) => {
+    //     if (err) {
+    //       console.error(err);
+    //     }
+    //   }
+    // );
     // console.info("[Sqlite] Łączny czas wstawiania danych: %dms", globalEnd);
 
     db4.close();
@@ -307,16 +307,16 @@ const addAccountsMongo = () => {
       function (err, newDocs) {
         if (i == results.length - 1) {
           var globalEnd = new Date() - globalStart;
-          fs.writeFile(
-            "./badania/insertNeDB.txt",
-            globalEnd + "\n",
-            { flag: "a+" },
-            (err) => {
-              if (err) {
-                console.error(err);
-              }
-            }
-          );
+          // fs.writeFile(
+          //   "./badania/insertNeDB.txt",
+          //   globalEnd + "\n",
+          //   { flag: "a+" },
+          //   (err) => {
+          //     if (err) {
+          //       console.error(err);
+          //     }
+          //   }
+          // );
           // console.info("[Nedb] Łączny czas wstawiania danych: %dms", globalEnd);
         }
       }
@@ -594,16 +594,16 @@ async function insertDataToLowDB() {
   db2.write();
 
   var end = new Date() - start;
-  fs.writeFile(
-    "./badania/insertLowDB.txt",
-    end + "\n",
-    { flag: "a+" },
-    (err) => {
-      if (err) {
-        console.error(err);
-      }
-    }
-  );
+  // fs.writeFile(
+  //   "./badania/insertLowDB.txt",
+  //   end + "\n",
+  //   { flag: "a+" },
+  //   (err) => {
+  //     if (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  // );
   // console.info("[LowDB] Czas wstawiania danych: %dms", end);
 }
 
@@ -682,16 +682,16 @@ const insertDataToLevelDB = () => {
   }
 
   var end = new Date() - start;
-  fs.writeFile(
-    "./badania/insertLevelDB.txt",
-    end + "\n",
-    { flag: "a+" },
-    (err) => {
-      if (err) {
-        console.error(err);
-      }
-    }
-  );
+  // fs.writeFile(
+  //   "./badania/insertLevelDB.txt",
+  //   end + "\n",
+  //   { flag: "a+" },
+  //   (err) => {
+  //     if (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  // );
   // console.info("[LevelDB] Czas wstawiania danych: %dms", end);
 };
 
