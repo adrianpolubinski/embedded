@@ -22,6 +22,7 @@ const deleteAllDataFromSqlite = () => {
       //     }
       //   }
       // );
+      db4.run("VACUUM;");
       db4.close();
     });
   });
@@ -108,6 +109,7 @@ async function deleteAllDataFromLowDB() {
 //////////////////////////////////////////// levelDB ////////////////////////////////////////////////
 import levelup from "levelup";
 import leveldown from "leveldown";
+import Batch from "levelup/lib/batch";
 
 const deleteAllDataFromLevelDB = () => {
   var start = new Date();

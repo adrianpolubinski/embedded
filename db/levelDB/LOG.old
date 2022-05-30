@@ -1,33 +1,3 @@
-2022/05/06-20:10:39.503 2860 Recovering log #17682
-2022/05/06-20:10:39.504 2860 Level-0 table #17685: started
-2022/05/06-20:10:39.513 2860 Level-0 table #17685: 120359 bytes OK
-2022/05/06-20:10:39.524 2860 Delete type=0 #17682
-2022/05/06-20:10:39.524 2860 Delete type=3 #17668
-2022/05/06-20:10:39.524 55cc Compacting 4@0 + 5@1 files
-2022/05/06-20:10:39.559 55cc Generated table #17687@0: 38926 keys, 2170383 bytes
-2022/05/06-20:10:39.602 55cc Generated table #17688@0: 43608 keys, 2176740 bytes
-2022/05/06-20:10:39.641 55cc Generated table #17689@0: 45420 keys, 2177788 bytes
-2022/05/06-20:10:39.680 55cc Generated table #17690@0: 46844 keys, 2179430 bytes
-2022/05/06-20:10:39.719 55cc Generated table #17691@0: 44408 keys, 2175507 bytes
-2022/05/06-20:10:39.764 55cc Generated table #17692@0: 41932 keys, 2174062 bytes
-2022/05/06-20:10:39.807 55cc Generated table #17693@0: 43216 keys, 2174714 bytes
-2022/05/06-20:10:39.833 55cc Generated table #17694@0: 26997 keys, 1374718 bytes
-2022/05/06-20:10:39.833 55cc Compacted 4@0 + 5@1 files => 16603342 bytes
-2022/05/06-20:10:39.838 55cc compacted to: files[ 0 8 3 0 0 0 0 ]
-2022/05/06-20:10:39.838 55cc Compacting 1@1 + 1@2 files
-2022/05/06-20:10:39.880 55cc Generated table #17695@1: 41200 keys, 2173922 bytes
-2022/05/06-20:10:39.880 55cc Compacted 1@1 + 1@2 files => 2173922 bytes
-2022/05/06-20:10:39.884 55cc compacted to: files[ 0 7 3 0 0 0 0 ]
-2022/05/06-20:10:39.884 55cc Delete type=2 #17688
-2022/05/06-20:10:39.884 55cc Compacting 1@1 + 1@2 files
-2022/05/06-20:10:39.924 55cc Generated table #17696@1: 41204 keys, 2174075 bytes
-2022/05/06-20:10:39.924 55cc Compacted 1@1 + 1@2 files => 2174075 bytes
-2022/05/06-20:10:39.927 55cc compacted to: files[ 0 6 3 0 0 0 0 ]
-2022/05/06-20:10:39.928 55cc Delete type=2 #17689
-2022/05/06-20:10:39.928 55cc Delete type=2 #17695
-2022/05/06-20:10:39.928 55cc Compacting 1@1 + 1@2 files
-2022/05/06-20:10:39.970 55cc Generated table #17697@1: 41217 keys, 2174713 bytes
-2022/05/06-20:10:39.970 55cc Compacted 1@1 + 1@2 files => 2174713 bytes
-2022/05/06-20:10:39.974 55cc compacted to: files[ 0 5 3 0 0 0 0 ]
-2022/05/06-20:10:39.974 55cc Delete type=2 #17690
-2022/05/06-20:10:39.974 55cc Delete type=2 #17696
+2022/05/30-16:47:32.739 5dfc Recovering log #18172
+2022/05/30-16:47:32.763 5dfc Delete type=0 #18172
+2022/05/30-16:47:32.763 5dfc Delete type=3 #18171

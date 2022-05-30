@@ -2,6 +2,5 @@
 for /l %%x in (1, 1, 15) do (
 node deleteAllData.js
 node insertData.js 5000
-node groupByTitleName.js
-@REM node getFileInfo.js
+node getFileInfo.js
 )
