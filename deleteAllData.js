@@ -1,6 +1,7 @@
 //////////////////////////////////// Sqlite //////////////////////////////////////////////
 import fs from "fs";
 import sqlite3 from "sqlite3";
+import path from "path";
 
 const deleteAllDataFromSqlite = () => {
   var start = new Date();
@@ -109,7 +110,6 @@ async function deleteAllDataFromLowDB() {
 //////////////////////////////////////////// levelDB ////////////////////////////////////////////////
 import levelup from "levelup";
 import leveldown from "leveldown";
-import Batch from "levelup/lib/batch";
 
 const deleteAllDataFromLevelDB = () => {
   var start = new Date();
@@ -135,9 +135,20 @@ const deleteAllDataFromLevelDB = () => {
       //   }
       // );
     });
+
+  // test file size
+  // fs.readdir("db/levelDB", (err, files) => {
+  //   if (err) throw err;
+
+  //   for (const file of files) {
+  //     fs.unlink(path.join("db/levelDB", file), (err) => {
+  //       if (err) throw err;
+  //     });
+  //   }
+  // });
 };
 
 deleteAllDataFromSqlite();
-deleteAllDataFromNedb();
-deleteAllDataFromLowDB();
-deleteAllDataFromLevelDB();
+// deleteAllDataFromNedb();
+// deleteAllDataFromLowDB();
+// deleteAllDataFromLevelDB();

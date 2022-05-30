@@ -696,7 +696,6 @@ const insertDataToLevelDB = () => {
 };
 
 insertDataToSqlite();
-
 // insertDataToNedb();
 // insertDataToLowDB();
 // insertDataToLevelDB();
